@@ -8,5 +8,4 @@ class Lucy(pygame.sprite.Sprite):
         self.rect.center = (250, 100)
 
     def update(self):
-        #self.rect.x += 5
-        pass
+        self.rect.x += 5
