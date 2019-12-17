@@ -1,4 +1,4 @@
 WIDTH = 500
 HEIGHT = 200
-FPS = 30
+FPS = 22
 ASSETS = '../assets'

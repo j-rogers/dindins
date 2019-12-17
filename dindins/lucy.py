@@ -12,6 +12,17 @@ class Lucy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.direction = 'right'
+        self.index = 0
+
+        # Idle animation
+        self.idle = [
+            pygame.image.load(f'{ASSETS}/lucy/idle/idle1.png'),
+            pygame.image.load(f'{ASSETS}/lucy/idle/idle1.png'),
+            pygame.image.load(f'{ASSETS}/lucy/idle/idle2.png'),
+            pygame.image.load(f'{ASSETS}/lucy/idle/idle2.png'),
+            pygame.image.load(f'{ASSETS}/lucy/idle/idle3.png'),
+            pygame.image.load(f'{ASSETS}/lucy/idle/idle4.png')
+        ]
 
         # Walking animation
         self.walk = [
@@ -22,7 +33,6 @@ class Lucy(pygame.sprite.Sprite):
             pygame.image.load(f'{ASSETS}/lucy/walk/walk5.png'),
             pygame.image.load(f'{ASSETS}/lucy/walk/walk6.png')
         ]
-        self.walker = 0
 
 
     def _flip(self, direction):
@@ -37,26 +47,31 @@ class Lucy(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
             self.direction = direction
 
-    def _walk(self):
-        """Plays the walking animation"""
-        # Reset walker index if needed
-        self.walker = 0 if self.walker == 5 else self.walker
+    def _playanimation(self, animation):
+        """Plays the specified animation
 
-        # Flip animation if walking left
+        Args:
+            animation: List of images that create the animation
+            index: Index that specifies what current image should be shown
+        """
+        # Reset the index if reached the end of the animation
+        self.index = 0 if self.index == (len(animation) - 1) else self.index
+
+        # Flip image if we are going left
         if self.direction == 'left':
-            self.image = pygame.transform.flip(self.walk[self.walker], True, False)
+            self.image = pygame.transform.flip(animation[self.index], True, False)
         else:
-            self.image = self.walk[self.walker]
+            self.image = animation[self.index]
 
         # Increase index
-        self.walker += 1
+        self.index += 1
 
     def update(self):
         """Update sprite
 
         This method handles all the live updates for the sprite. This includes movement and object interaction.
         """
-        # Default/Idle
+        # Stops Lucy from moving
         self.speedx = 0
         self.speedy = 0
 
@@ -66,19 +81,26 @@ class Lucy(pygame.sprite.Sprite):
         # Movement
         if keystate[pygame.K_LEFT]:
             self.speedx = -5
-            self._walk()
+            self._playanimation(self.walk)
             self._flip('left')
         if keystate[pygame.K_RIGHT]:
             self.speedx = 5
-            self._walk()
+            self._playanimation(self.walk)
             self._flip('right')
         if keystate[pygame.K_UP]:
             self.speedy = -5
-            self._walk()
+            self._playanimation(self.walk)
         if keystate[pygame.K_DOWN]:
             self.speedy = 5
-            self._walk()
+            self._playanimation(self.walk)
 
+        # Apply movement
         self.rect.x += self.speedx
         self.rect.y += self.speedy
+
+        # Play idle animation when not moving
+        if not keystate[pygame.K_LEFT] and not keystate[pygame.K_RIGHT] and not keystate[pygame.K_UP] and not keystate[pygame.K_DOWN]:
+            self._playanimation(self.idle)
+
+
 
