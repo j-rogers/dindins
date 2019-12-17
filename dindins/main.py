@@ -1,6 +1,7 @@
 import pygame
 
 from dindins.lucy import Lucy
+from dindins.settings import *
 
 
 class DinDins:
@@ -11,10 +12,9 @@ class DinDins:
         self._running = True
 
         # Build root display
-        self._rootdisplay = pygame.display.set_mode((500, 200))
+        self._rootdisplay = pygame.display.set_mode((WIDTH, HEIGHT))
 
         # Set up clock
-        self._fps = 60
         self._clock = pygame.time.Clock()
 
         # Set up initial sprites
@@ -42,7 +42,7 @@ class DinDins:
     def run(self):
         """Runs the game"""
         while self._running:
-            self._clock.tick(self._fps)
+            self._clock.tick(FPS)
             for event in pygame.event.get():
                 self._handle(event)
             self._render()

@@ -1,11 +1,13 @@
 import pygame
 
+from dindins.settings import *
+
 class Lucy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('../assets/lucy/lucy.png')
         self.rect = self.image.get_rect()
-        self.rect.center = (250, 100)
+        self.rect.center = (WIDTH / 2, HEIGHT / 2)
 
     def update(self):
         self.speedx = 0
