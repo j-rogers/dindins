@@ -1,11 +1,14 @@
 import pygame
 
+from dindins.settings import *
+
 
 class Text:
     def __init__(self, text, fg, bg=None, font='freesansbold.ttf', size=18):
         self.font = pygame.font.Font(font, size)
         self.text = self.font.render(text, True, fg, bg)
         self.rect = self.text.get_rect()
+
 
 class Button(Text):
     def __init__(self, text, fg, ic, ac, width, height, display, font='freesansbold.ttf', size=18, action=None):
@@ -35,5 +38,32 @@ class Button(Text):
         else:
             pygame.draw.rect(self.display, self.ic, (x, y, self.width, self.height))
 
-    def center(self, x, y):
-        self.rect.center = (())
+
+class DialogueBox(Text):
+    def __init__(self, text, fg, display, bg=GREEN, font='freesansbold.ttf', size=18, width=200, height=100):
+        # Init text
+        super().__init__('', fg, bg, font, size)
+        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+
+        # Properties
+        self.fg = fg
+        self.bg = bg
+        self.display = display
+        self.width = width
+        self.height = height
+
+        # Set text buffer
+        self.buffer = [character for character in text]
+        self.index = 0
+
+    def update(self):
+        # Get x, y to position rect
+        x, y = self.rect.center
+        x -= 10
+        y -= self.height / 2
+        pygame.draw.rect(self.display, self.bg, (x, y, 200, 100))
+
+        if self.index != (len(self.buffer) + 1):
+            text = ''.join(self.buffer[0:self.index])
+            self.text = self.font.render(text, True, self.fg)
+            self.index += 1

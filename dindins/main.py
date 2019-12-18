@@ -104,6 +104,7 @@ class DinDins:
 
         self._cleanup()
 
+
 if __name__ == '__main__':
     game = DinDins()
     game.run()
