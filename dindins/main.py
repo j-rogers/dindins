@@ -92,7 +92,7 @@ class DinDins:
         player = Lucy()
         sprites.add(player)
 
-        test = DialogueBox('hello this is a test hello this is a test', RED, self._rootdisplay)
+        test = DialogueBox('hello there i would like to test the capability of my text wrapping logic', RED, self._rootdisplay)
         text.append(test)
 
         while self.running:

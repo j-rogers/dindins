@@ -40,7 +40,7 @@ class Button(Text):
 
 
 class DialogueBox(Text):
-    def __init__(self, text, fg, display, bg=GREEN, font='freesansbold.ttf', size=18, width=200, height=100):
+    def __init__(self, text, fg, display, bg=GREEN, font='freesansbold.ttf', size=18, width=500, height=100):
         # Init text
         super().__init__('', fg, bg, font, size)
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
@@ -54,16 +54,35 @@ class DialogueBox(Text):
 
         # Set text buffer
         self.buffer = [character for character in text]
-        self.index = 0
+        self.typed = ['']
 
     def update(self):
         # Get x, y to position rect
         x, y = self.rect.center
         x -= 10
         y -= self.height / 2
-        pygame.draw.rect(self.display, self.bg, (x, y, 200, 100))
+        pygame.draw.rect(self.display, self.bg, (x, y, self.width, self.height))
 
-        if self.index != (len(self.buffer) + 1):
-            text = ''.join(self.buffer[0:self.index])
-            self.text = self.font.render(text, True, self.fg)
-            self.index += 1
+        if self.buffer:
+            char = self.buffer.pop(0)
+            self.typed[-1] += char
+            w, h = self.font.size(self.typed[-1])
+            if w > self.width:
+                split = self.typed[-1].rsplit(' ', 1)
+                self.typed[-1] = split[-2:][0]
+                self.typed.append(split[-1])
+
+        for line in self.typed:
+            self.display.blit(self.font.render(line, True, self.fg), (x, y))
+            y += 20
+
+
+
+
+        #if self.index != (len(self.buffer) + 1):
+        #    text = ''.join(self.buffer[0:self.index])
+        #    w, h = self.font.size()
+        #    if w > self.width:
+        #        splittext = text.rsplit(' ', 1)
+        #    self.text = self.font.render(text, True, self.fg)
+        #    self.index += 1
