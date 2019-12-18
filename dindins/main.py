@@ -18,17 +18,6 @@ class DinDins:
         # Set up clock
         self._clock = pygame.time.Clock()
 
-        # Group for sprites
-        self._allsprites = pygame.sprite.Group()
-
-        # Group for buttons
-        self._buttons = []
-
-    def _gameinit(self):
-        # Set up initial sprites
-        player = Lucy()
-        self._allsprites.add(player)
-
     def _cleanup(self):
         """Cleans up and quits pygame"""
         pygame.quit()
@@ -39,66 +28,79 @@ class DinDins:
         if event.type == pygame.QUIT:
             self.running = False
 
-    def _render(self):
-        """Renders the game
+    def _update(self, sprites=None, text=None, objects=None):
+        """Renders specified items
 
-        Render is used to display the sprites currently on screen in the game.
+        Renders and updates all specified items. Sprites use the pygame.sprite.Group object to execute all draw and
+        update calls. Objects and text are rendered/updated seperately.
+
+        Args:
+            sprites: pygame.sprite.Group object containing all sprites to be rendered
+            text: Simple text boxes to be rendered
+            objects: Any object with an update() method
         """
-        self._rootdisplay.fill((0,0,0))
-        self._allsprites.draw(self._rootdisplay)
-        pygame.display.flip()
+        self._rootdisplay.fill(BLACK)
 
-    def _update(self):
-        """Updates all functional objects
+        if sprites:
+            sprites.update()
+            sprites.draw(self._rootdisplay)
 
-        Performs an update on all functional objects, such as (some) sprites (e.g. Lucy) and buttons.
-        """
-        self._allsprites.update()
+        for object in objects:
+            object.update()
 
-        for button in self._buttons:
-            button.update()
+        for t in text:
+            self._rootdisplay.blit(t.text, t.rect)
+
+        pygame.display.update()
+        #pygame.display.flip()
 
     def run(self):
         """Displays the main menu"""
+        text = []
+        buttons = []
+
         # Title
         title = Text('Din Dins', RED, size=50)
         title.rect.center = (WIDTH / 2, HEIGHT / 8)
+        text.append(title)
 
         # Play button
         play = Button('Play', RED, GREEN, BLUE, 100, 100, self._rootdisplay,  action=self.run_game)
         play.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self._buttons.append(play)
+        text.append(play)
+        buttons.append(play)
 
         # Options button
         options = Button('Options', RED, GREEN, BLUE, 100, 100, self._rootdisplay)
         options.rect.center = (WIDTH / 2, HEIGHT / 2 + 110)
-        self._buttons.append(options)
+        text.append(options)
+        buttons.append(options)
 
         while self.running:
             # Handlers
             self._clock.tick(FPS)
             for event in pygame.event.get():
                 self._handle(event)
-            self._update()
-
-            # Place objects on screen
-            self._rootdisplay.blit(title.text, title.rect)
-            self._rootdisplay.blit(play.text, play.rect)
-            self._rootdisplay.blit(options.text, options.rect)
-
-            # Update display
-            pygame.display.update()
+            self._update(text=text, objects=buttons)
 
         self._cleanup()
 
     def run_game(self):
-        self._gameinit()
+        text = []
+        sprites = pygame.sprite.Group()
+        # Set up initial sprites
+        player = Lucy()
+        sprites.add(player)
+
+        test = DialogueBox('hello this is a test hello this is a test', RED, self._rootdisplay)
+        text.append(test)
+
         while self.running:
             self._clock.tick(FPS)
             for event in pygame.event.get():
                 self._handle(event)
-            self._render()
-            self._update()
+
+            self._update(sprites=sprites, text=text, objects=text)
 
         self._cleanup()
 
