@@ -49,7 +49,7 @@ class DinDins:
             object.update()
 
         for t in text:
-            self._rootdisplay.blit(t.text, t.rect)
+            self._rootdisplay.blit(t, t.rect)
 
         pygame.display.update()
         #pygame.display.flip()
@@ -60,16 +60,16 @@ class DinDins:
         buttons = []
 
         # Title
-        title = Text('Din Dins', RED, (WIDTH / 2, HEIGHT / 8), size=50)
-        text.append(title)
+        title = Text.render('Din Dins', RED, (WIDTH / 2, HEIGHT / 8), size=50)
+        #text.append(title)
 
         # Play button
-        play = Button('Play', self._rootdisplay, (WIDTH / 2, HEIGHT / 2),  action=self.run_game)
+        play = Button('Play', (WIDTH / 2, HEIGHT / 2),  action=self.run_game)
         text.append(play)
         buttons.append(play)
 
         # Options button
-        options = Button('Options', self._rootdisplay, (WIDTH / 2, HEIGHT / 2 + 110))
+        options = Button('Options', (WIDTH / 2, HEIGHT / 2 + 110))
         text.append(options)
         buttons.append(options)
 
@@ -89,7 +89,7 @@ class DinDins:
         player = Lucy()
         sprites.add(player)
 
-        test = DialogueBox('hello there i would like to test the capability of my text wrapping logic', RED, self._rootdisplay, (WIDTH / 4, HEIGHT * 0.9))
+        test = DialogueBox('hello there i would like to test the capability of my text wrapping logic', RED, (WIDTH / 2, HEIGHT * 0.5))
         text.append(test)
 
         while self.running:

@@ -4,14 +4,9 @@ from dindins.settings import *
 
 
 class Text:
-    """Text
-
-    Attributes:
-        font: pygame.Font containing font and size of the text
-        text: pygame.Surface object containing the rendered text
-        rect: Rect of the text surface
-    """
-    def __init__(self, text, fg, pos, bg=None, font='freesansbold.ttf', size=18):
+    """Text"""
+    @staticmethod
+    def render(text, fg, pos, bg=None, font='freesansbold.ttf', size=18):
         """Creates the text
 
         Args:
@@ -22,12 +17,14 @@ class Text:
             font: Font to use for text (defaults to freesansbold.ttf)
             size: Size of text (defaults to 18)
         """
-        self.font = pygame.font.Font(font, size)
-        self.text = self.font.render(text, True, fg, bg)
-        self.rect = self.text.get_rect()
-        self.rect.center = pos
+        font = pygame.font.Font(font, size)
+        text = font.render(text, True, fg, bg)
+        rect = text.get_rect()
+        rect.center = pos
+        return text, rect
 
-class Button(Text):
+
+class Button(pygame.Surface):
     """Button
 
     Attributes:
@@ -35,15 +32,13 @@ class Button(Text):
         ac: Active colour (defaults to BLUE)
         width: Width of the button (defaults to 100)
         height: Height of the button (defaults to 100)
-        display: Root display to draw to
         action: Callback for when button is pressed
     """
-    def __init__(self, text, display, pos, fg=RED, ic=GREEN, ac=BLUE, width=100, height=100, font='freesansbold.ttf', size=18, action=None):
+    def __init__(self, text, pos, fg=RED, ic=GREEN, ac=BLUE, width=100, height=100, font='freesansbold.ttf', size=18, action=None):
         """Creates the button
 
         Args:
             text: String to be displayed in the button
-            display: Root display
             pos: (x, y) coordinates of the center of the button
             fg: Text colour
             ic: Inactive colour
@@ -54,13 +49,15 @@ class Button(Text):
             size: Font size
             action: Callback for when the button is pressed
         """
-        super().__init__(text, fg, pos, font=font, size=size)
+        super().__init__((width, height))
+        self.rect = self.get_rect()
+        self.rect.center = pos
+        self.text_surface, self.text_rect = Text.render(text, fg, (width / 2, height / 2), font=font, size=size)
 
         self.ic = ic
         self.ac = ac
         self.width = width
         self.height = height
-        self.display = display
         self.action = action
 
     def update(self):
@@ -73,34 +70,33 @@ class Button(Text):
         y -= self.height / 2
 
         if x + self.width > mouse[0] > x and y + self.height > mouse[1] > y:
-            pygame.draw.rect(self.display, self.ac, (x, y, self.width, self.height))
+            self.fill(self.ac)
 
             if click[0] and self.action:
                 self.action()
         else:
-            pygame.draw.rect(self.display, self.ic, (x, y, self.width, self.height))
+            self.fill(self.ic)
+
+        self.blit(self.text_surface, self.text_rect)
 
 
-
-class DialogueBox(Text):
+class DialogueBox(pygame.Surface):
     """Dialogue box
 
     Attributes:
         fg: Colour of text
         bg: Background colour of box
-        display: Root display for drawing
         width: Width of the box
         height: Height of the box
         buffer: Characters remaining to be printed to screen
         typed: List of lines that have been printed to the screen
     """
-    def __init__(self, text, fg, display, pos, bg=GREEN, width=500, height=100, font='freesansbold.ttf', size=18):
+    def __init__(self, text, fg, pos, bg=GREEN, width=500, height=100, font='freesansbold.ttf', size=18):
         """Creates the dialogue box
 
         Args:
             text: String to be printed
             fg: Colour of text
-            display: Root display for drawing
             pos: Position of box
             bg: Background colour of box (defaults to GREEN)
             width: Width of box (defaults to 500)
@@ -108,14 +104,13 @@ class DialogueBox(Text):
             font: Font of text (defaults to freesansbold.ttf)
             size: Size of font/text
         """
-        # Init text
-        super().__init__('', fg, pos, bg=bg, font=font, size=size)
+        super().__init__((width, height))
+        self.rect = self.get_rect()
         self.rect.center = pos
 
         # Properties
         self.fg = fg
         self.bg = bg
-        self.display = display
         self.width = width
         self.height = height
 
@@ -124,27 +119,36 @@ class DialogueBox(Text):
         self.typed = ['']
 
     def update(self):
-        # Get x, y to position rect
-        x, y = self.rect.center
-        x -= 10
-        y -= self.height / 2
-        pygame.draw.rect(self.display, self.bg, (x, y, self.width, self.height))
+        # Fill background
+        self.fill(self.bg)
 
+        # Characters left to print
         if self.buffer:
+            # Get character and add it to typed
             char = self.buffer.pop(0)
             self.typed[-1] += char
-            w, h = self.font.size(self.typed[-1])
+
+            # Get size of text with added character
+            text_surface, text_rect = Text.render(self.typed[-1], self.fg, (0, 0))
+            w, h = text_surface.get_size()
+
+            # Split and create new line if the character goes past box width
             if w > self.width:
                 split = self.typed[-1].rsplit(' ', 1)
                 self.typed[-1] = split[-2:][0]
                 self.typed.append(split[-1])
+
+        # Nothing left to pring, tell user to press space to continue
         else:
-            xx, yy = self.rect.center
-            self.display.blit(self.font.render('Press space to continue...', True, self.fg), (xx - 10, yy * 0.9))
+            text, rect = Text.render('Press space to continue...', self.fg, (self.width * 0.8, self.height - 10), size=12)
+            self.blit(text, rect)
             # show 'press space to continue'
             # check for space event
             pass
 
+        # Print out each line
+        y = 0
         for line in self.typed:
-            self.display.blit(self.font.render(line, True, self.fg), (x, y))
+            text, rect = Text.render(line, self.fg, (0, 0))
+            self.blit(text, (10, y))
             y += 20
