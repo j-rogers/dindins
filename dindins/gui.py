@@ -60,7 +60,7 @@ class Button(pygame.Surface):
         self.height = height
         self.action = action
 
-    def update(self):
+    def render(self):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
@@ -118,7 +118,7 @@ class DialogueBox(pygame.Surface):
         self.buffer = [character for character in text]
         self.typed = ['']
 
-    def update(self):
+    def render(self):
         # Fill background
         self.fill(self.bg)
 
