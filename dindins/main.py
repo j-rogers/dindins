@@ -5,6 +5,33 @@ from dindins.settings import *
 from dindins.gui import *
 
 
+class MainMenu(pygame.Surface):
+    def __init__(self):
+        super().__init__((WIDTH, HEIGHT))
+
+        self.text = []
+        self.buttons = []
+
+        title = Text.render('Din Dins', RED, (WIDTH / 2, HEIGHT / 8), size=50)
+        playbtn = Button('Play', (WIDTH / 2, HEIGHT / 2), action=self._rungame)
+        optionsbtn = Button('Options', (WIDTH / 2, HEIGHT / 2 + 110))
+
+        self.text.append(title)
+        self.buttons.append(playbtn)
+        self.buttons.append(optionsbtn)
+
+    def _rungame(self):
+        pass
+
+    def render(self):
+        for surf, rect in self.text:
+            self.blit(surf, rect)
+
+        for button in self.buttons:
+            button.render()
+            self.blit(button, button.rect)
+
+
 class DinDins:
     def __init__(self):
         """Initilises game"""
@@ -28,7 +55,7 @@ class DinDins:
         if event.type == pygame.QUIT:
             self.running = False
 
-    def _update(self, sprites=None, text=None, objects=None):
+    def _render(self, screen):
         """Renders specified items
 
         Renders and updates all specified items. Sprites use the pygame.sprite.Group object to execute all draw and
@@ -40,45 +67,21 @@ class DinDins:
             objects: Any object with an update() method
         """
         self._rootdisplay.fill(BLACK)
-
-        if sprites:
-            sprites.update()
-            sprites.draw(self._rootdisplay)
-
-        for object in objects:
-            object.update()
-
-        for t in text:
-            self._rootdisplay.blit(t, t.rect)
+        screen.render()
+        self._rootdisplay.blit(screen, (0, 0))
 
         pygame.display.update()
         #pygame.display.flip()
 
     def run(self):
         """Displays the main menu"""
-        text = []
-        buttons = []
-
-        # Title
-        title = Text.render('Din Dins', RED, (WIDTH / 2, HEIGHT / 8), size=50)
-        #text.append(title)
-
-        # Play button
-        play = Button('Play', (WIDTH / 2, HEIGHT / 2),  action=self.run_game)
-        text.append(play)
-        buttons.append(play)
-
-        # Options button
-        options = Button('Options', (WIDTH / 2, HEIGHT / 2 + 110))
-        text.append(options)
-        buttons.append(options)
-
+        screen = MainMenu()
         while self.running:
             # Handlers
             self._clock.tick(FPS)
             for event in pygame.event.get():
                 self._handle(event)
-            self._update(text=text, objects=buttons)
+            self._render(screen)
 
         self._cleanup()
 
