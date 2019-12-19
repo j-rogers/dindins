@@ -139,6 +139,8 @@ class DialogueBox(Text):
                 self.typed[-1] = split[-2:][0]
                 self.typed.append(split[-1])
         else:
+            xx, yy = self.rect.center
+            self.display.blit(self.font.render('Press space to continue...', True, self.fg), (xx - 10, yy * 0.9))
             # show 'press space to continue'
             # check for space event
             pass
