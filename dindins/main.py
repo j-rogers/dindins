@@ -5,31 +5,89 @@ from dindins.settings import *
 from dindins.gui import *
 
 
-class MainMenu(pygame.Surface):
+class Screen(pygame.Surface):
     def __init__(self):
         super().__init__((WIDTH, HEIGHT))
 
         self.text = []
         self.buttons = []
+        self.sprites = pygame.sprite.Group()
 
+    def update(self):
+        pass
+
+    def render(self):
+        # Clear screen
+        self.fill(BLACK)
+
+        # Text
+        for surf, rect in self.text:
+            self.blit(surf, rect)
+
+        # Buttons
+        for button in self.buttons:
+            button.render()
+            self.blit(button, button.rect)
+
+        # Sprites
+        self.sprites.update()
+        self.sprites.draw(self)
+
+
+class MainMenu(Screen):
+    def __init__(self):
+        super().__init__()
+
+        # List of text and buttons
+        self.text = []
+        self.buttons = []
+
+        # GUI elements
         title = Text.render('Din Dins', RED, (WIDTH / 2, HEIGHT / 8), size=50)
         playbtn = Button('Play', (WIDTH / 2, HEIGHT / 2), action=self._rungame)
-        optionsbtn = Button('Options', (WIDTH / 2, HEIGHT / 2 + 110))
+        optionsbtn = Button('Options', (WIDTH / 2, HEIGHT / 2 + 110), action=self._options)
 
+        # Add elements to be rendered
         self.text.append(title)
         self.buttons.append(playbtn)
         self.buttons.append(optionsbtn)
 
+        # Flags for displaying other screens
+        self.rungame = False
+        self.options = False
+
+    def _options(self):
+        self.options = True
+
     def _rungame(self):
-        pass
+        self.rungame = True
 
-    def render(self):
-        for surf, rect in self.text:
-            self.blit(surf, rect)
+    def update(self):
+        if self.rungame:
+            return GameScreen()
+        elif self.options:
+            return OptionsMenu()
+        else:
+            return self
 
-        for button in self.buttons:
-            button.render()
-            self.blit(button, button.rect)
+
+class GameScreen(Screen):
+    def __init__(self):
+        super().__init__()
+
+        self.player = Lucy()
+        self.sprites.add(self.player)
+
+    def update(self):
+        return self
+
+
+class OptionsMenu(Screen):
+    def __init__(self):
+        super().__init__()
+
+    def update(self):
+        return self
 
 
 class DinDins:
@@ -66,12 +124,10 @@ class DinDins:
             text: Simple text boxes to be rendered
             objects: Any object with an update() method
         """
-        self._rootdisplay.fill(BLACK)
         screen.render()
         self._rootdisplay.blit(screen, (0, 0))
 
-        pygame.display.update()
-        #pygame.display.flip()
+        pygame.display.flip()
 
     def run(self):
         """Displays the main menu"""
@@ -81,6 +137,8 @@ class DinDins:
             self._clock.tick(FPS)
             for event in pygame.event.get():
                 self._handle(event)
+
+            screen = screen.update()
             self._render(screen)
 
         self._cleanup()

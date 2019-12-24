@@ -34,7 +34,6 @@ class Lucy(pygame.sprite.Sprite):
             pygame.image.load(f'{ASSETS}/lucy/walk/walk6.png')
         ]
 
-
     def _flip(self, direction):
         """Flips the direction of Lucy
 
@@ -72,6 +71,7 @@ class Lucy(pygame.sprite.Sprite):
         This method handles all the live updates for the sprite. This includes movement and object interaction.
         """
         # Stops Lucy from moving
+        speed = 3
         self.speedx = 0
         self.speedy = 0
 
@@ -80,18 +80,18 @@ class Lucy(pygame.sprite.Sprite):
 
         # Movement
         if keystate[pygame.K_LEFT]:
-            self.speedx = -5
+            self.speedx = -speed
             self._playanimation(self.walk)
             self._flip('left')
         if keystate[pygame.K_RIGHT]:
-            self.speedx = 5
+            self.speedx = speed
             self._playanimation(self.walk)
             self._flip('right')
         if keystate[pygame.K_UP]:
-            self.speedy = -5
+            self.speedy = -speed
             self._playanimation(self.walk)
         if keystate[pygame.K_DOWN]:
-            self.speedy = 5
+            self.speedy = speed
             self._playanimation(self.walk)
 
         # Apply movement
