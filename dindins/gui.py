@@ -1,3 +1,10 @@
+"""GUI Objects
+
+This file contains objects used to give the user a GUI. This includes text, buttons, and dialogue boxes.
+
+Author: Josh Rogers
+"""
+
 import pygame
 
 from dindins.settings import *
