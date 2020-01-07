@@ -3,6 +3,7 @@ import pygame
 from dindins.lucy import Lucy
 from dindins.settings import *
 from dindins.gui import *
+from dindins.game_objects import *
 
 
 class Screen(pygame.Surface):
@@ -22,11 +23,25 @@ class Screen(pygame.Surface):
     def __init__(self):
         """Initiates pygame.Surface and attributes"""
         super().__init__((WIDTH, HEIGHT))
+        self.rect = self.get_rect()
+        self.rect.center = ((WIDTH / 2, HEIGHT / 2))
 
         self.text = []
         self.buttons = []
         self.sprites = pygame.sprite.Group()
         self.dialogue = []
+        self.walls = []
+
+    def handle(self, event):
+        """Handles events
+
+        This method is to be implemented by the child object. The handler is used to process any events the current
+        screen may be interested in. If no events are needed, then the implementation of this method can be omitted.
+
+        Args:
+            event: pygame.Event to be handled
+        """
+        pass
 
     def update(self):
         """Updates the screen
@@ -64,6 +79,13 @@ class Screen(pygame.Surface):
             else:
                 box.render()
                 self.blit(box, box.rect)
+
+        # Walls
+        for wall in self.walls:
+            wall.render()
+            x = self.rect.x + wall.rect.x
+            y = self.rect.y + wall.rect.y
+            self.blit(wall, (x, y))
 
         # Sprites
         self.sprites.update()
@@ -113,7 +135,16 @@ class GameScreen(Screen):
 
         self.player = Lucy()
         self.sprites.add(self.player)
-        self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
+        #self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
+
+        self.walls = []
+        wall = Wall((WIDTH / 2, HEIGHT / 2), colour=RED)
+        self.walls.append(wall)
+
+    def handle(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.rect.x += 3
 
     def update(self):
         return self
@@ -145,10 +176,16 @@ class DinDins:
         pygame.quit()
         exit(0)
 
-    def _handle(self, event):
-        """Event handler"""
+    def _handle(self, event, screen):
+        """Event handler
+
+        The DinDins event handler processes events that concern the application as a whole, such as closing the game.
+        Otherwise it passes the event to the current screens handler.
+        """
         if event.type == pygame.QUIT:
             self.running = False
+        else:
+            screen.handle(event)
 
     def _render(self, screen):
         """Renders specified items
@@ -173,7 +210,7 @@ class DinDins:
             # Handlers
             self._clock.tick(FPS)
             for event in pygame.event.get():
-                self._handle(event)
+                self._handle(event, screen)
 
             screen = screen.update()
             self._render(screen)
