@@ -6,7 +6,21 @@ from dindins.gui import *
 
 
 class Screen(pygame.Surface):
+    """Base Screen Object
+
+    This provides the base screen object that other screens inherit off. It itself inherits from the pygame.Surface
+    object so it can easily be rendered and interacted by other pygame objects. It includes lists of GUI elements that
+    can be rendered, as well as an abstract update method, and a render method. The render method is not to be changed
+    by child objects unless for good reason. The update method is to be implemented by the child object.
+
+    Attributes:
+        text: List of text to be rendered
+        buttons: List of buttons to be rendered
+        sprites: pygame.sprite.Group of sprites to be rendered
+        dialogue: List of dialogue boxes to be rendered
+    """
     def __init__(self):
+        """Initiates pygame.Surface and attributes"""
         super().__init__((WIDTH, HEIGHT))
 
         self.text = []
@@ -15,9 +29,22 @@ class Screen(pygame.Surface):
         self.dialogue = []
 
     def update(self):
+        """Updates the screen
+
+        This method is to be implemented by the child object. The update method is used to indicate that the screen
+        should be updated to a different screen. For example, clicking the 'Options' button on the main menu will cause
+        the screen to be updated, no longer rendering the main menu but instead the options screen.
+
+        Returns:
+            This method should return the screen to be rendered. If no change of screen is needed then return self.
+        """
         pass
 
     def render(self):
+        """Renders all gui elements
+
+        Renders each GUI element currently in the attribute lists.
+        """
         # Clear screen
         self.fill(BLACK)
 

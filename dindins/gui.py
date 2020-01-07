@@ -4,10 +4,15 @@ from dindins.settings import *
 
 
 class Text:
-    """Text"""
+    """Text
+
+    This class provides a simple helper method to produce the pygame text and rect objects required for displaying text
+    on a screen. The text object contains the pygame.Surface object the text is rendered on to, and the rect object is
+    used for positioning the text.
+    """
     @staticmethod
     def render(text, fg, pos, bg=None, font='freesansbold.ttf', size=18):
-        """Creates the text
+        """Creates the text objects
 
         Args:
             text: String of text to display
@@ -16,6 +21,9 @@ class Text:
             bg: Background colour (defaults to None)
             font: Font to use for text (defaults to freesansbold.ttf)
             size: Size of text (defaults to 18)
+
+        Returns:
+            A tuple of the text and rect objects
         """
         font = pygame.font.Font(font, size)
         text = font.render(text, True, fg, bg)
@@ -27,7 +35,12 @@ class Text:
 class Button(pygame.Surface):
     """Button
 
+    A button is essentially a filled rectangle with text that executes an action when clicked.
+
     Attributes:
+        rect: Rect/position of the button
+        text_surface: Text surface of the button
+        text_rect: Position of the text on the button
         ic: Inactive colour (defaults to GREEN)
         ac: Active colour (defaults to BLUE)
         width: Width of the button (defaults to 100)
@@ -61,6 +74,12 @@ class Button(pygame.Surface):
         self.action = action
 
     def render(self):
+        """Renders the button
+
+        Renders the button and checks if the mouse is hovering over the button and/or has been clicked. If the mouse is
+        hovering over the button then the background should be changed to the active colour. If the button is clicked
+        then it's stored action will be called.
+        """
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
@@ -69,29 +88,39 @@ class Button(pygame.Surface):
         x -= self.width / 2
         y -= self.height / 2
 
+        # Check if mouse is over button
         if x + self.width > mouse[0] > x and y + self.height > mouse[1] > y:
+            # Change to active colour
             self.fill(self.ac)
 
+            # Check if button was clicked
             if click[0] and self.action:
                 self.action()
         else:
+            # Set to inactive colour
             self.fill(self.ic)
 
+        # Render text onto button
         self.blit(self.text_surface, self.text_rect)
 
 
 class DialogueBox(pygame.Surface):
     """Dialogue box
 
+    The dialogue box presents text to the user in a typewriter fashion. That is, each character is printed one at a
+    time. If the character would go over the edge of the box,then it is instead printed to a newline.
+
     Attributes:
+        rect: Position of the box
         fg: Colour of text
         bg: Background colour of box
         width: Width of the box
         height: Height of the box
         buffer: Characters remaining to be printed to screen
         typed: List of lines that have been printed to the screen
+        finished: Boolean that indicates that the user has pressed space to close the box
     """
-    def __init__(self, text, pos, fg=RED, bg=GREEN, width=500, height=100, font='freesansbold.ttf', size=18):
+    def __init__(self, text, pos, fg=RED, bg=GREEN, width=500, height=100):
         """Creates the dialogue box
 
         Args:
@@ -101,8 +130,6 @@ class DialogueBox(pygame.Surface):
             bg: Background colour of box (defaults to GREEN)
             width: Width of box (defaults to 500)
             height: Height of box (defaults to 100)
-            font: Font of text (defaults to freesansbold.ttf)
-            size: Size of font/text
         """
         super().__init__((width, height))
         self.rect = self.get_rect()
@@ -121,6 +148,12 @@ class DialogueBox(pygame.Surface):
         self.finished = False
 
     def render(self):
+        """Renders the dialogue box
+
+        One at a time the characters in the buffer are printed on the box. If a character would go over the edge of the
+        box it is instead printed on a newline. This continues until the buffer is empty. When this happens, the user is
+        prompted to 'Press space to continue'. Pressing space will then close the box.
+        """
         # Fill background
         self.fill(self.bg)
 
