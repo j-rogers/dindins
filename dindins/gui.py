@@ -91,7 +91,7 @@ class DialogueBox(pygame.Surface):
         buffer: Characters remaining to be printed to screen
         typed: List of lines that have been printed to the screen
     """
-    def __init__(self, text, fg, pos, bg=GREEN, width=500, height=100, font='freesansbold.ttf', size=18):
+    def __init__(self, text, pos, fg=RED, bg=GREEN, width=500, height=100, font='freesansbold.ttf', size=18):
         """Creates the dialogue box
 
         Args:
@@ -118,9 +118,13 @@ class DialogueBox(pygame.Surface):
         self.buffer = [character for character in text]
         self.typed = ['']
 
+        self.finished = False
+
     def render(self):
         # Fill background
         self.fill(self.bg)
+
+        keystate = pygame.key.get_pressed()
 
         # Characters left to print
         if self.buffer:
@@ -138,13 +142,13 @@ class DialogueBox(pygame.Surface):
                 self.typed[-1] = split[-2:][0]
                 self.typed.append(split[-1])
 
-        # Nothing left to pring, tell user to press space to continue
+        # Nothing left to print, tell user to press space to continue
         else:
             text, rect = Text.render('Press space to continue...', self.fg, (self.width * 0.8, self.height - 10), size=12)
             self.blit(text, rect)
-            # show 'press space to continue'
-            # check for space event
-            pass
+
+            if keystate[pygame.K_SPACE]:
+                self.finished = True
 
         # Print out each line
         y = 0

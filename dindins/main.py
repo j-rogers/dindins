@@ -12,6 +12,7 @@ class Screen(pygame.Surface):
         self.text = []
         self.buttons = []
         self.sprites = pygame.sprite.Group()
+        self.dialogue = []
 
     def update(self):
         pass
@@ -28,6 +29,14 @@ class Screen(pygame.Surface):
         for button in self.buttons:
             button.render()
             self.blit(button, button.rect)
+
+        # Dialogue boxes
+        for box in self.dialogue:
+            if box.finished:
+                self.dialogue.remove(box)
+            else:
+                box.render()
+                self.blit(box, box.rect)
 
         # Sprites
         self.sprites.update()
@@ -77,6 +86,7 @@ class GameScreen(Screen):
 
         self.player = Lucy()
         self.sprites.add(self.player)
+        self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
 
     def update(self):
         return self
@@ -140,25 +150,6 @@ class DinDins:
 
             screen = screen.update()
             self._render(screen)
-
-        self._cleanup()
-
-    def run_game(self):
-        text = []
-        sprites = pygame.sprite.Group()
-        # Set up initial sprites
-        player = Lucy()
-        sprites.add(player)
-
-        test = DialogueBox('hello there i would like to test the capability of my text wrapping logic', RED, (WIDTH / 2, HEIGHT * 0.5))
-        text.append(test)
-
-        while self.running:
-            self._clock.tick(FPS)
-            for event in pygame.event.get():
-                self._handle(event)
-
-            self._update(sprites=sprites, text=text, objects=text)
 
         self._cleanup()
 
