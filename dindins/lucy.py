@@ -70,33 +70,20 @@ class Lucy(pygame.sprite.Sprite):
 
         This method handles all the live updates for the sprite. This includes movement and object interaction.
         """
-        # Stops Lucy from moving
-        speed = 3
-        self.speedx = 0
-        self.speedy = 0
-
         # Get current keystate
         keystate = pygame.key.get_pressed()
 
-        # Movement
+        # Set animation and direction of Lucy
         if keystate[pygame.K_LEFT]:
-            self.speedx = -speed
             self._playanimation(self.walk)
             self._flip('left')
         if keystate[pygame.K_RIGHT]:
-            self.speedx = speed
             self._playanimation(self.walk)
             self._flip('right')
         if keystate[pygame.K_UP]:
-            self.speedy = -speed
             self._playanimation(self.walk)
         if keystate[pygame.K_DOWN]:
-            self.speedy = speed
             self._playanimation(self.walk)
-
-        # Apply movement
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
 
         # Play idle animation when not moving
         if not keystate[pygame.K_LEFT] and not keystate[pygame.K_RIGHT] and not keystate[pygame.K_UP] and not keystate[pygame.K_DOWN]:

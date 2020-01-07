@@ -46,12 +46,14 @@ class Screen(pygame.Surface):
     def update(self):
         """Updates the screen
 
-        This method is to be implemented by the child object. The update method is used to indicate that the screen
-        should be updated to a different screen. For example, clicking the 'Options' button on the main menu will cause
-        the screen to be updated, no longer rendering the main menu but instead the options screen.
+        This method is to be implemented by the child object. The update method is used to place any code that needs to
+        be called once every frame. For example, game logic of holding down a directional key to move the screen
+        up/down/left/right. It also indicates that the screen should be updated to a different screen. For example,
+        clicking the 'Options' button on the main menu will cause the screen to be updated, no longer rendering the
+        main menu but instead the options screen.
 
         Returns:
-            This method should return the screen to be rendered. If no change of screen is needed then return self.
+            This method must return the screen to be rendered. If no change of screen is needed then return self.
         """
         pass
 
@@ -141,12 +143,23 @@ class GameScreen(Screen):
         wall = Wall((WIDTH / 2, HEIGHT / 2), colour=RED)
         self.walls.append(wall)
 
+        self.speedx = 0
+        self.speedy = 0
+
     def handle(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.rect.x += 3
+        pass
 
     def update(self):
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_LEFT]:
+            self.rect.x += 3
+        if keystate[pygame.K_RIGHT]:
+            self.rect.x -= 3
+        if keystate[pygame.K_UP]:
+            self.rect.y += 3
+        if keystate[pygame.K_DOWN]:
+            self.rect.y -= 3
+
         return self
 
 
