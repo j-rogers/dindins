@@ -11,7 +11,7 @@ from dindins.settings import *
 
 
 class Wall(pygame.Surface):
-    def __init__(self, pos, colour=BLACK, width=100, height=100):
+    def __init__(self, pos, width, height, colour=BLACK):
         super().__init__((width, height))
         self.rect = self.get_rect()
         self.rect.center = pos

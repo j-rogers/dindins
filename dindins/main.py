@@ -85,9 +85,7 @@ class Screen(pygame.Surface):
         # Walls
         for wall in self.walls:
             wall.render()
-            x = self.rect.x + wall.rect.x
-            y = self.rect.y + wall.rect.y
-            self.blit(wall, (x, y))
+            self.blit(wall, wall.rect)
 
         # Sprites
         self.sprites.update()
@@ -139,26 +137,39 @@ class GameScreen(Screen):
         self.sprites.add(self.player)
         #self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
 
-        self.walls = []
-        wall = Wall((WIDTH / 2, HEIGHT / 2), colour=RED)
+        wall = Wall((WIDTH * .6, HEIGHT / 2), 10, 100, colour=RED)
         self.walls.append(wall)
-
-        self.speedx = 0
-        self.speedy = 0
 
     def handle(self, event):
         pass
 
     def update(self):
+        """Updates the screen
+
+        To keep the 'camera' centered on Lucy, we move the objects on the screen instead of the Lucy sprite. So we
+        update rect x and y coordinates when the directional keys are pressed to achieve this.
+
+        Returns:
+            The screen to be rendered
+        """
+        speed_x = 0
+        speed_y = 0
+
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
-            self.rect.x += 3
+            speed_x = 3
         if keystate[pygame.K_RIGHT]:
-            self.rect.x -= 3
+            speed_x = -3
         if keystate[pygame.K_UP]:
-            self.rect.y += 3
+            speed_y = 3
         if keystate[pygame.K_DOWN]:
-            self.rect.y -= 3
+            speed_y = -3
+
+        # Shift wall rects for collision detection
+        for wall in self.walls:
+            wall.rect.move_ip(speed_x, speed_y)
+            if self.player.rect.colliderect(wall):
+                wall.rect.move_ip(-1*speed_x, -1*speed_y)
 
         return self
 
