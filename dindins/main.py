@@ -149,12 +149,19 @@ class GameScreen(Screen):
             Door((560, 645), 50, 20, 'Scary door')
         )
 
+        self.speed = 3
+
     def handle(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.interactables())
                 if object:
-                    object.interact()
+                    r = object.interact()
+                    if type(r) == DialogueBox:
+                        self.dialogue.append(r)
+        elif event.type == PAUSE:
+            self.speed = 0
+
 
     def update(self):
         """Updates the screen
@@ -170,13 +177,13 @@ class GameScreen(Screen):
 
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
-            speed_x = 3
+            speed_x = self.speed
         if keystate[pygame.K_RIGHT]:
-            speed_x = -3
+            speed_x = self.speed * -1
         if keystate[pygame.K_UP]:
-            speed_y = 3
+            speed_y = self.speed
         if keystate[pygame.K_DOWN]:
-            speed_y = -3
+            speed_y = self.speed * -1
 
         # Shift wall rects
         for object in self.gameobjects.sprites():

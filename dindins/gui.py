@@ -152,7 +152,11 @@ class DialogueBox(pygame.Surface):
         self.buffer = [character for character in text]
         self.typed = ['']
 
+        # Flag to know when finished
         self.finished = False
+
+        # Pause while box is up
+        pygame.event.post(pygame.event.Event(PAUSE, {}))
 
     def render(self):
         """Renders the dialogue box
@@ -189,6 +193,7 @@ class DialogueBox(pygame.Surface):
 
             if keystate[pygame.K_SPACE]:
                 self.finished = True
+                pygame.event.post(pygame.event.Event(RESUME, {}))
 
         # Print out each line
         y = 0
