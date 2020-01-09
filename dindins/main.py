@@ -152,7 +152,7 @@ class GameScreen(Screen):
     def handle(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects)
+                object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.interactables())
                 if object:
                     object.interact()
 
@@ -183,7 +183,7 @@ class GameScreen(Screen):
             object.rect.move_ip(speed_x, speed_y)
 
         # Reset walls if collision occurred
-        if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects):
+        if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
             for object in self.gameobjects.sprites():
                 object.rect.move_ip(-1 * speed_x, -1 * speed_y)
 

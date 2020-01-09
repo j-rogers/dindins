@@ -15,13 +15,12 @@ class ObjectsGroup(pygame.sprite.Group):
         super().__init__(objects)
 
     def colliders(self):
-        #TODO: need to return a group instead of list
         colliders = []
         for object in self.sprites():
             if object.collide:
                 colliders.append(object)
 
-        return colliders
+        return pygame.sprite.Group(colliders)
 
     def interactables(self):
         interactables = []
@@ -29,7 +28,7 @@ class ObjectsGroup(pygame.sprite.Group):
             if object.interactable:
                 interactables.append(object)
 
-        return interactables
+        return pygame.sprite.Group(interactables)
 
 
 class BaseObject(pygame.sprite.Sprite):
