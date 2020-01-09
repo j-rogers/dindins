@@ -20,3 +20,19 @@ class Wall(pygame.Surface):
 
     def render(self):
         self.fill(self.colour)
+
+
+class Door(pygame.Surface):
+    def __init__(self, pos, width, height, message, colour=GREEN):
+        super().__init__((width, height))
+        self.rect = self.get_rect()
+        self.rect.center = pos
+
+        self.colour = colour
+        self.message = message
+
+    def interact(self):
+        pass
+
+    def render(self):
+        self.fill(self.colour)

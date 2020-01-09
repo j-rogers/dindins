@@ -31,6 +31,7 @@ class Screen(pygame.Surface):
         self.sprites = pygame.sprite.Group()
         self.dialogue = []
         self.walls = []
+        self.doors = []
 
     def handle(self, event):
         """Handles events
@@ -87,6 +88,11 @@ class Screen(pygame.Surface):
             wall.render()
             self.blit(wall, wall.rect)
 
+        # Walls
+        for door in self.doors:
+            door.render()
+            self.blit(door, door.rect)
+
         # Sprites
         self.sprites.update()
         self.sprites.draw(self)
@@ -138,12 +144,13 @@ class GameScreen(Screen):
         #self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
 
         self.walls.extend([
-            Wall((600, 400), 10, 500),    # Hallway East
-            Wall((530, 645), 150, 10),    # Front door
-            Wall((460, 595), 10, 100),    # Room #1 door
-            Wall((485, 545), 60, 10),     # Lobby north wall
-            Wall((510, 350), 10, 400)
+            Wall((600, 400), 10, 500),  # Hallway east wall
+            Wall((530, 645), 150, 10),  # Lobby south wall
+            Wall((460, 595), 10, 100),  # Lobby west wall
+            Wall((485, 545), 60, 10),   # Lobby north wall
+            Wall((510, 350), 10, 400)   # Hallway west wall
         ])
+
 
     def handle(self, event):
         pass
