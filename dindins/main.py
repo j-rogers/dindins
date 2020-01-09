@@ -132,9 +132,6 @@ class GameScreen(Screen):
     def __init__(self):
         super().__init__()
 
-        # Bool for paused
-        self.paused = False
-
         # Add player character
         self.player.add(Lucy())
         self.speed = 3
@@ -164,7 +161,7 @@ class GameScreen(Screen):
     def handle(self, event):
         # Space to interact with objects
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not self.paused:
+            if event.key == pygame.K_SPACE and self.speed:
                 object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.interactables())
                 if object:
                     r = object.interact()
@@ -174,12 +171,10 @@ class GameScreen(Screen):
         # Pause the game
         elif event.type == PAUSE:
             self.speed = 0
-            self.paused = True
 
         # Resume the game
         elif event.type == RESUME:
             self.speed = 3
-            self.paused = False
 
     def update(self):
         """Updates the screen
