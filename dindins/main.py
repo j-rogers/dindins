@@ -195,6 +195,9 @@ class GameScreen(Screen):
             speed_y = self.speed
         if keystate[pygame.K_DOWN]:
             speed_y = self.speed * -1
+        if keystate[pygame.K_LSHIFT]:
+            speed_x *= 2
+            speed_y *= 2
 
         # Shift all objects
         for object in self.gameobjects.sprites():
