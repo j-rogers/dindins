@@ -145,13 +145,20 @@ class GameScreen(Screen):
             Wall((530, 645), 150, 10),  # Lobby south wall
             Wall((460, 595), 10, 100),  # Lobby west wall
             Wall((485, 545), 60, 10),   # Lobby north wall
-            Wall((510, 350), 10, 400)   # Hallway west wall
+            Wall((510, 470), 10, 160),  # Hallway west wall (lobby -> bedroom)
+            Wall((380, 395), 250, 10),  # Bedroom south wall
+            Wall((510, 220), 10, 200),  # Hallway west wall (bedroom -> study)
+            Wall((380, 195), 250, 10),  # Bedroom north wall
+            Wall((260, 295), 10, 200)   # Bedroom west wall
         )
 
         # Doors
         self.gameobjects.add(
-            Door((560, 645), 50, 20, 'Scary door'),  # Front door
-            Door((510, 450), 20, 50, 'Stinky door')  # Bathroom door
+            Door((560, 645), 50, 20, 'Scary door'),     # Front door
+            Door((510, 450), 20, 50, 'Stinky door'),    # Bathroom door (from hallway)
+            Door((460, 595), 20, 50, 'storage door'),   # Room 1
+            Door((440, 395), 50, 20, 'stinky door 2'),  # Bathroom door (from bedroom)
+            Door((320, 395), 50, 20, 'outside door'),   # Bedroom courtyard
         )
 
     def handle(self, event):
