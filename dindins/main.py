@@ -132,8 +132,12 @@ class GameScreen(Screen):
     def __init__(self):
         super().__init__()
 
+        # Bool for paused
+        self.paused = False
+
+        # Add player character
         self.player.add(Lucy())
-        #self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
+        self.speed = 3
 
         # Walls
         self.gameobjects.add(
@@ -149,19 +153,25 @@ class GameScreen(Screen):
             Door((560, 645), 50, 20, 'Scary door')
         )
 
-        self.speed = 3
-
     def handle(self, event):
+        # Space to interact with objects
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and not self.paused:
                 object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.interactables())
                 if object:
                     r = object.interact()
                     if type(r) == DialogueBox:
                         self.dialogue.append(r)
+
+        # Pause the game
         elif event.type == PAUSE:
             self.speed = 0
+            self.paused = True
 
+        # Resume the game
+        elif event.type == RESUME:
+            self.speed = 3
+            self.paused = False
 
     def update(self):
         """Updates the screen
@@ -185,11 +195,11 @@ class GameScreen(Screen):
         if keystate[pygame.K_DOWN]:
             speed_y = self.speed * -1
 
-        # Shift wall rects
+        # Shift all objects
         for object in self.gameobjects.sprites():
             object.rect.move_ip(speed_x, speed_y)
 
-        # Reset walls if collision occurred
+        # Reset objects if collision occurred
         if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
             for object in self.gameobjects.sprites():
                 object.rect.move_ip(-1 * speed_x, -1 * speed_y)
