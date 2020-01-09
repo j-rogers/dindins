@@ -8,12 +8,17 @@ Author: Josh Rogers
 import pygame
 
 from dindins.settings import *
+from dindins.gui import *
 
 
 class ObjectsGroup(pygame.sprite.Group):
-    def __init__(self, *objects):
-        super().__init__(objects)
+    """Group for game objects
 
+    This class is an extension of pygame.sprite.Group to provide a Group for game objects. This implementation inlcudes
+    two key extentions; the colliders() and interactables() methods. These methods return a subset Group of objects that
+    have the collide and interactable properties. These can be used in the main game loop to easily detect collisions
+    and objects for interactions.
+    """
     def colliders(self):
         colliders = []
         for object in self.sprites():
@@ -32,6 +37,18 @@ class ObjectsGroup(pygame.sprite.Group):
 
 
 class BaseObject(pygame.sprite.Sprite):
+    """Base object
+
+    This class provides a base for in game objects, and is treated as a pygame.sprite.Sprite. As they are sprites, each
+    object requires an image property. Each object has the option to be a collider or interactable, through the collide
+    and interactable properties, respectively. If interactable is set, then the interact method MUST be implemented.
+
+    Attributes:
+        image: Image surface of the sprite
+        rect: pygame.Rect of the image
+        collide: Bool indicating if collision should be checked with this object
+        interactable: Bool indicating if this object can be interacted with
+    """
     def __init__(self, pos, image, collide=False, interactable=False):
         super().__init__()
         self.image = image
@@ -42,18 +59,47 @@ class BaseObject(pygame.sprite.Sprite):
         self.interactable = interactable
 
     def interact(self):
-        pass
+        """Triggered when player interacts with the object
+
+        To be implemented in objects that have the interactable property set. This method should return any GUI objects
+        (e.g. Dialogue boxes) to be rendered.
+        """
+        raise NotImplementedError
 
 
 class Wall(BaseObject):
+    """Wall
+
+    This is a simple wall that is used for barriers around the map.  The image is just a jpg of a solid colour so it can
+    be transformed without stretching any textures. As the wall acts as a barrier, the collide property is set.
+    """
     def __init__(self, pos, width, height):
+        """Init
+
+        Args:
+            pos: Tuple in form (x, y) providing coordinates of where to place the wall
+            width: Width of the wall
+            height: Height of the wall
+        """
         image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
         image = pygame.transform.scale(image, (width, height))
         super().__init__(pos, image, collide=True)
 
 
 class Door(BaseObject):
+    """Door
+
+    Doors are interactable objects.
+    """
     def __init__(self, pos, width, height, message):
+        """Init
+
+        Args:
+            pos: Coordinates of where to place the door
+            width: Width of the door
+            height: Height of the door
+            message: Message to give to the user when door is used
+        """
         image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
         image = pygame.transform.scale(image, (width, height))
         super().__init__(pos, image, interactable=True)
@@ -61,4 +107,12 @@ class Door(BaseObject):
         self.message = message
 
     def interact(self):
-        print('door')
+        """Interact
+
+        Gives the user a dialogue box with the provided message.
+
+        Returns:
+            Dialogue box
+        """
+        box = DialogueBox(self.message, (WIDTH / 2, HEIGHT * .8))
+        return box
