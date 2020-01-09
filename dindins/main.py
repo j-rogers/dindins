@@ -74,14 +74,6 @@ class Screen(pygame.Surface):
             button.render()
             self.blit(button, button.rect)
 
-        # Dialogue boxes
-        for box in self.dialogue:
-            if box.finished:
-                self.dialogue.remove(box)
-            else:
-                box.render()
-                self.blit(box, box.rect)
-
         # Game objects
         self.gameobjects.update()
         self.gameobjects.draw(self)
@@ -89,6 +81,14 @@ class Screen(pygame.Surface):
         # Player
         self.player.update()
         self.player.draw(self)
+
+        # Dialogue boxes
+        for box in self.dialogue:
+            if box.finished:
+                self.dialogue.remove(box)
+            else:
+                box.render()
+                self.blit(box, box.rect)
 
 
 class MainMenu(Screen):
@@ -150,7 +150,8 @@ class GameScreen(Screen):
 
         # Doors
         self.gameobjects.add(
-            Door((560, 645), 50, 20, 'Scary door')
+            Door((560, 645), 50, 20, 'Scary door'),  # Front door
+            Door((510, 450), 20, 50, 'Stinky door')  # Bathroom door
         )
 
     def handle(self, event):
