@@ -137,8 +137,13 @@ class GameScreen(Screen):
         self.sprites.add(self.player)
         #self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
 
-        wall = Wall((WIDTH * .6, HEIGHT / 2), 10, 100, colour=RED)
-        self.walls.append(wall)
+        self.walls.extend([
+            Wall((600, 400), 10, 500),    # Hallway East
+            Wall((530, 645), 150, 10),    # Front door
+            Wall((460, 595), 10, 100),    # Room #1 door
+            Wall((485, 545), 60, 10),     # Lobby north wall
+            Wall((510, 350), 10, 400)
+        ])
 
     def handle(self, event):
         pass
@@ -165,11 +170,14 @@ class GameScreen(Screen):
         if keystate[pygame.K_DOWN]:
             speed_y = -3
 
-        # Shift wall rects for collision detection
+        # Shift wall rects
         for wall in self.walls:
             wall.rect.move_ip(speed_x, speed_y)
-            if self.player.rect.colliderect(wall):
-                wall.rect.move_ip(-1*speed_x, -1*speed_y)
+
+        # Reset walls if collision occured
+        if self.player.rect.collidelistall(self.walls):
+            for wall in self.walls:
+                wall.rect.move_ip(-1 * speed_x, -1 * speed_y)
 
         return self
 
