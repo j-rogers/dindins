@@ -10,32 +10,34 @@ import pygame
 from dindins.settings import *
 
 
-class ObjectsGroup:
+class ObjectsGroup(pygame.sprite.Group):
     def __init__(self, *objects):
-        self.objects = []
-        self.colliders = []
-        self.interactables = []
+        super().__init__(objects)
 
-        self.add(objects)
-
-    def add(self, *objects):
-        if not objects[0]:
-            return None
-        for object in objects:
-            self.objects.append(object)
-
+    def colliders(self):
+        #TODO: need to return a group instead of list
+        colliders = []
+        for object in self.sprites():
             if object.collide:
-                self.colliders.append(object)
+                colliders.append(object)
+
+        return colliders
+
+    def interactables(self):
+        interactables = []
+        for object in self.sprites():
             if object.interactable:
-                self.interactables.append(object)
+                interactables.append(object)
 
-class SurfaceObject(pygame.Surface):
-    def __init__(self, pos, width, height, colour, collide=False, interactable=False):
-        super().__init__((width, height))
-        self.rect = self.get_rect()
+        return interactables
+
+
+class BaseObject(pygame.sprite.Sprite):
+    def __init__(self, pos, image, collide=False, interactable=False):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect()
         self.rect.center = pos
-
-        self.colour = colour
 
         self.collide = collide
         self.interactable = interactable
@@ -43,18 +45,20 @@ class SurfaceObject(pygame.Surface):
     def interact(self):
         pass
 
-    def render(self):
-        self.fill(self.colour)
+
+class Wall(BaseObject):
+    def __init__(self, pos, width, height):
+        image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
+        image = pygame.transform.scale(image, (width, height))
+        super().__init__(pos, image, collide=True)
 
 
-class Wall(SurfaceObject):
-    def __init__(self, pos, width, height, colour=RED):
-        super().__init__(pos, width, height, colour, collide=True)
+class Door(BaseObject):
+    def __init__(self, pos, width, height, message):
+        image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
+        image = pygame.transform.scale(image, (width, height))
+        super().__init__(pos, image, interactable=True)
 
-
-class Door(SurfaceObject):
-    def __init__(self, pos, width, height, message, colour=GREEN):
-        super().__init__(pos, width, height, colour, interactable=True)
         self.message = message
 
     def interact(self):

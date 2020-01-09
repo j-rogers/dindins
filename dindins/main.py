@@ -28,8 +28,8 @@ class Screen(pygame.Surface):
 
         self.text = []
         self.buttons = []
-        self.sprites = pygame.sprite.Group()
         self.dialogue = []
+        self.player = pygame.sprite.GroupSingle()
         self.gameobjects = ObjectsGroup()
 
     def handle(self, event):
@@ -83,13 +83,12 @@ class Screen(pygame.Surface):
                 self.blit(box, box.rect)
 
         # Game objects
-        for object in self.gameobjects.objects:
-            object.render()
-            self.blit(object, object.rect)
+        self.gameobjects.update()
+        self.gameobjects.draw(self)
 
-        # Sprites
-        self.sprites.update()
-        self.sprites.draw(self)
+        # Player
+        self.player.update()
+        self.player.draw(self)
 
 
 class MainMenu(Screen):
@@ -133,8 +132,7 @@ class GameScreen(Screen):
     def __init__(self):
         super().__init__()
 
-        self.player = Lucy()
-        self.sprites.add(self.player)
+        self.player.add(Lucy())
         #self.dialogue.append(DialogueBox('hello there i would like to test the capabilities of my dialogue box thingy', (WIDTH / 2, HEIGHT / 2)))
 
         # Walls
@@ -154,10 +152,9 @@ class GameScreen(Screen):
     def handle(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                objects = self.player.rect.collidelistall(self.gameobjects.interactables)
-                if objects:
-                    for i in objects:
-                        self.gameobjects.interactables[i].interact()
+                object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects)
+                if object:
+                    object.interact()
 
     def update(self):
         """Updates the screen
@@ -182,12 +179,12 @@ class GameScreen(Screen):
             speed_y = -3
 
         # Shift wall rects
-        for object in self.gameobjects.objects:
+        for object in self.gameobjects.sprites():
             object.rect.move_ip(speed_x, speed_y)
 
         # Reset walls if collision occurred
-        if self.player.rect.collidelistall(self.gameobjects.colliders):
-            for object in self.gameobjects.objects:
+        if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects):
+            for object in self.gameobjects.sprites():
                 object.rect.move_ip(-1 * speed_x, -1 * speed_y)
 
         return self
