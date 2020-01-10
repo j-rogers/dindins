@@ -39,15 +39,17 @@ class Lucy(pygame.sprite.Sprite):
                 pygame.image.load(f'{ASSETS}/lucy/walk/right/lucy_walk_right_2.png')]
         }
 
-    def _playanimation(self, animation, rate=11):
+    def _playanimation(self, animation, rate=2):
         """Plays the specified animation
+
+        The ticker increments with every frame, so we perform a modulus using the FPS and rate to calculate when a new
+        animation image should be displayed.
 
         Args:
             animation: List of images that create the animation
-            index: Index that specifies what current image should be shown
+            rate: Rate that frames should be shown per second
         """
-        # Plays 2 frames per second
-        if self.ticker % rate == 0:
+        if self.ticker % (FPS / rate) == 0:
             # Reset the index if reached the end of the animation
             self.index = 0 if self.index == len(animation) else self.index
 
@@ -61,17 +63,21 @@ class Lucy(pygame.sprite.Sprite):
     def update(self):
         """Update sprite
 
-        This method handles all the live updates for the sprite. This includes movement and object interaction.
+        This method handles all the live updates for the sprite. This includes changing animations for current key
+        presses.
         """
         # Get current keystate
         keystate = pygame.key.get_pressed()
 
         # Set animation and direction of Lucy
-        if keystate[pygame.K_LEFT]:
+        # If up/down and either left or right are pressed, the up/down animation should be used. So, the left/right
+        # animations are only used if up or down are NOT being pressed. Additionally, the ticker should be reset if we
+        # are changing directions, in order to immediately play the new animation.
+        if keystate[pygame.K_LEFT] and not (keystate[pygame.K_UP] or keystate[pygame.K_DOWN]):
             self.ticker = 0 if self.direction != 'left' else self.ticker
             self.direction = 'left'
             self._playanimation(self.walk[self.direction])
-        if keystate[pygame.K_RIGHT]:
+        if keystate[pygame.K_RIGHT] and not (keystate[pygame.K_UP] or keystate[pygame.K_DOWN]):
             self.ticker = 0 if self.direction != 'right' else self.ticker
             self.direction = 'right'
             self._playanimation(self.walk[self.direction])
