@@ -68,15 +68,19 @@ class Lucy(pygame.sprite.Sprite):
 
         # Set animation and direction of Lucy
         if keystate[pygame.K_LEFT]:
+            self.ticker = 0 if self.direction != 'left' else self.ticker
             self.direction = 'left'
             self._playanimation(self.walk[self.direction])
         if keystate[pygame.K_RIGHT]:
+            self.ticker = 0 if self.direction != 'right' else self.ticker
             self.direction = 'right'
             self._playanimation(self.walk[self.direction])
         if keystate[pygame.K_UP]:
+            self.ticker = 0 if self.direction != 'up' else self.ticker
             self.direction = 'up'
             self._playanimation(self.walk[self.direction])
         if keystate[pygame.K_DOWN]:
+            self.ticker = 0 if self.direction != 'down' else self.ticker
             self.direction = 'down'
             self._playanimation(self.walk[self.direction])
 
