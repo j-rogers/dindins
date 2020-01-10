@@ -204,14 +204,23 @@ class GameScreen(Screen):
         else:
             self.player.sprite.rate = 2
 
-        # Shift all objects
+        # Shift all objects on x axis
         for object in self.gameobjects.sprites():
-            object.rect.move_ip(speed_x, speed_y)
+            object.rect.move_ip(speed_x, 0)
 
         # Reset objects if collision occurred
         if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
             for object in self.gameobjects.sprites():
-                object.rect.move_ip(-1 * speed_x, -1 * speed_y)
+                object.rect.move_ip(-1 * speed_x, 0)
+
+        # Shift all objects on y axis
+        for object in self.gameobjects.sprites():
+            object.rect.move_ip(0, speed_y)
+
+        # Reset objects if collision occurred
+        if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
+            for object in self.gameobjects.sprites():
+                object.rect.move_ip(0, -1 * speed_y)
 
         return self
 
