@@ -2,7 +2,7 @@ import pygame
 
 WIDTH = 1000
 HEIGHT = 800
-FPS = 22
+FPS = 30
 ASSETS = '../assets'
 
 # Colours

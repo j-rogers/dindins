@@ -11,9 +11,12 @@ class Lucy(pygame.sprite.Sprite):
         self.image = pygame.image.load(f'{ASSETS}/lucy/idle/lucy_idle_down.png')
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2 + 50, HEIGHT / 2)
+
+        # Animation stuff
         self.direction = 'down'
         self.index = 0
         self.ticker = 0
+        self.rate = 2
 
         # Idle
         self.idle = {
@@ -39,7 +42,7 @@ class Lucy(pygame.sprite.Sprite):
                 pygame.image.load(f'{ASSETS}/lucy/walk/right/lucy_walk_right_2.png')]
         }
 
-    def _playanimation(self, animation, rate=2):
+    def _playanimation(self, animation):
         """Plays the specified animation
 
         The ticker increments with every frame, so we perform a modulus using the FPS and rate to calculate when a new
@@ -49,7 +52,7 @@ class Lucy(pygame.sprite.Sprite):
             animation: List of images that create the animation
             rate: Rate that frames should be shown per second
         """
-        if self.ticker % (FPS / rate) == 0:
+        if self.ticker % (FPS / self.rate) == 0:
             # Reset the index if reached the end of the animation
             self.index = 0 if self.index == len(animation) else self.index
 
