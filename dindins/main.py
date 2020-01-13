@@ -144,9 +144,12 @@ class GameScreen(Screen):
             Wall((485, 545), 60, 10),   # Lobby north wall
             Wall((510, 470), 10, 160),  # Hallway west wall (lobby -> bedroom)
             Wall((380, 395), 250, 10),  # Bedroom south wall
-            Wall((510, 220), 10, 200),  # Hallway west wall (bedroom -> study)
+            Wall((510, 215), 10, 220),  # Hallway west wall (bedroom -> study)
             Wall((380, 195), 250, 10),  # Bedroom north wall
-            Wall((260, 295), 10, 200)   # Bedroom west wall
+            Wall((260, 295), 10, 200),  # Bedroom west wall
+            Wall((475, 110), 75, 10),    # Alcove south wall
+            Wall((435, 65), 10, 100),  # Alcove west wall
+            Wall((475, 20), 75, 10)    # Alcove north wall
         )
 
         # Doors
@@ -156,6 +159,7 @@ class GameScreen(Screen):
             Door((460, 595), 20, 50, 'storage door'),   # Room 1
             Door((440, 395), 50, 20, 'stinky door 2'),  # Bathroom door (from bedroom)
             Door((320, 395), 50, 20, 'outside door'),   # Bedroom courtyard
+            Door((510, 150), 20, 50, 'Study'),          # Study
         )
 
     def handle(self, event):
