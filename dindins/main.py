@@ -138,28 +138,28 @@ class GameScreen(Screen):
 
         # Walls
         self.gameobjects.add(
-            Wall((600, 400), 10, 500),  # Hallway east wall
-            Wall((530, 645), 150, 10),  # Lobby south wall
-            Wall((460, 595), 10, 100),  # Lobby west wall
-            Wall((485, 545), 60, 10),   # Lobby north wall
-            Wall((510, 470), 10, 160),  # Hallway west wall (lobby -> bedroom)
-            Wall((380, 395), 250, 10),  # Bedroom south wall
-            Wall((510, 215), 10, 220),  # Hallway west wall (bedroom -> study)
-            Wall((380, 195), 250, 10),  # Bedroom north wall
-            Wall((260, 295), 10, 200),  # Bedroom west wall
-            Wall((475, 110), 75, 10),    # Alcove south wall
-            Wall((435, 65), 10, 100),  # Alcove west wall
-            Wall((475, 20), 75, 10)    # Alcove north wall
+            Wall((600, 400), 10, 500, 'hallway_east'),  # Hallway east wall
+            Wall((530, 645), 150, 10, 'lobby_south'),  # Lobby south wall
+            Wall((460, 595), 10, 100, 'lobby_west'),  # Lobby west wall
+            Wall((485, 545), 60, 10, 'lobby_north'),   # Lobby north wall
+            Wall((510, 470), 10, 160, 'hallway_west_lobbytobedroom'),  # Hallway west wall (lobby -> bedroom)
+            Wall((380, 395), 250, 10, 'bedroom_south'),  # Bedroom south wall
+            Wall((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
+            Wall((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
+            Wall((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
+            Wall((475, 110), 75, 10, 'alcove_south'),    # Alcove south wall
+            Wall((435, 65), 10, 100, 'alcove_west'),  # Alcove west wall
+            Wall((475, 20), 75, 10, 'alcove_north')    # Alcove north wall
         )
 
         # Doors
         self.gameobjects.add(
-            Door((560, 645), 50, 20, 'Scary door'),     # Front door
-            Door((510, 450), 20, 50, 'Stinky door'),    # Bathroom door (from hallway)
-            Door((460, 595), 20, 50, 'storage door'),   # Room 1
-            Door((440, 395), 50, 20, 'stinky door 2'),  # Bathroom door (from bedroom)
-            Door((320, 395), 50, 20, 'outside door'),   # Bedroom courtyard
-            Door((510, 150), 20, 50, 'Study'),          # Study
+            Door((560, 645), 50, 20, 'Scary door', 'front_door'),     # Front door
+            Door((510, 450), 20, 50, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
+            Door((460, 595), 20, 50, 'storage door', 'storage_door'),   # Room 1
+            Door((440, 395), 50, 20, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
+            Door((320, 395), 50, 20, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
+            Door((510, 150), 20, 50, 'Study', 'study_door'),          # Study
         )
 
     def handle(self, event):

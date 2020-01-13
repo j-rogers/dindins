@@ -35,6 +35,13 @@ class ObjectsGroup(pygame.sprite.Group):
 
         return pygame.sprite.Group(interactables)
 
+    def get(self, objectname):
+        for object in self.sprites():
+            if object.name == objectname:
+                return object
+
+        return None
+
 
 class BaseObject(pygame.sprite.Sprite):
     """Base object
@@ -46,14 +53,17 @@ class BaseObject(pygame.sprite.Sprite):
     Attributes:
         image: Image surface of the sprite
         rect: pygame.Rect of the image
-        collide: Bool indicating if collision should be checked with this object
-        interactable: Bool indicating if this object can be interacted with
+        name: Unique name of the object to identify it and retrieve it in a group
+        collide: Bool indicating if collision should be checked with this object (defaults to False)
+        interactable: Bool indicating if this object can be interacted with (defaults to False)
     """
-    def __init__(self, pos, image, collide=False, interactable=False):
+    def __init__(self, pos, image, name, collide=False, interactable=False):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = pos
+
+        self.name = name
 
         self.collide = collide
         self.interactable = interactable
@@ -73,7 +83,7 @@ class Wall(BaseObject):
     This is a simple wall that is used for barriers around the map.  The image is just a jpg of a solid colour so it can
     be transformed without stretching any textures. As the wall acts as a barrier, the collide property is set.
     """
-    def __init__(self, pos, width, height):
+    def __init__(self, pos, width, height, name):
         """Init
 
         Args:
@@ -83,7 +93,7 @@ class Wall(BaseObject):
         """
         image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
         image = pygame.transform.scale(image, (width, height))
-        super().__init__(pos, image, collide=True)
+        super().__init__(pos, image, name, collide=True)
 
 
 class Door(BaseObject):
@@ -91,7 +101,7 @@ class Door(BaseObject):
 
     Doors are interactable objects.
     """
-    def __init__(self, pos, width, height, message):
+    def __init__(self, pos, width, height, message, name):
         """Init
 
         Args:
@@ -102,7 +112,7 @@ class Door(BaseObject):
         """
         image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
         image = pygame.transform.scale(image, (width, height))
-        super().__init__(pos, image, interactable=True)
+        super().__init__(pos, image, name, interactable=True)
 
         self.message = message
 
