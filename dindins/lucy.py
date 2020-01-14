@@ -10,7 +10,7 @@ class Lucy(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(f'{ASSETS}/lucy/idle/lucy_idle_down.png')
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2 + 50, HEIGHT / 2 - 50)
+        self.rect.center = (WIDTH / 2, HEIGHT / 2)
 
         # Animation stuff
         self.direction = 'down'

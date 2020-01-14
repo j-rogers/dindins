@@ -138,7 +138,7 @@ class GameScreen(Screen):
 
         # Walls
         self.gameobjects.add(
-            Wall((600, 400), 10, 500, 'hallway_east'),  # Hallway east wall
+            Wall((600, 250), 10, 800, 'hallway_east'),  # Hallway east wall
             Wall((530, 645), 150, 10, 'lobby_south'),  # Lobby south wall
             Wall((460, 595), 10, 100, 'lobby_west'),  # Lobby west wall
             Wall((485, 545), 60, 10, 'lobby_north'),   # Lobby north wall
@@ -147,9 +147,10 @@ class GameScreen(Screen):
             Wall((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
             Wall((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
             Wall((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
-            Wall((475, 110), 75, 10, 'alcove_south'),    # Alcove south wall
-            Wall((435, 65), 10, 100, 'alcove_west'),  # Alcove west wall
-            Wall((475, 20), 75, 10, 'alcove_north')    # Alcove north wall
+            Wall((480, 110), 50, 10, 'alcove_south'),    # Alcove south wall
+            Wall((450, 65), 10, 100, 'alcove_west'),  # Alcove west wall
+            Wall((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
+            Wall((510, -100), 10, 250, 'hallway_west_glass')
         )
 
         # Doors
@@ -161,6 +162,10 @@ class GameScreen(Screen):
             Door((320, 395), 50, 20, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
             Door((510, 150), 20, 50, 'Study', 'study_door'),          # Study
         )
+
+        # Shift objects for initial positioning
+        for object in self.gameobjects.sprites():
+            object.rect.move_ip(-50, 400)
 
     def handle(self, event):
         # Space to interact with objects
