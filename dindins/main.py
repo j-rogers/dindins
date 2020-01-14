@@ -169,6 +169,11 @@ class GameScreen(Screen):
             Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
         )
 
+        # Floor
+        self.gameobjects.add(
+            Floor((700, 0), 200, 200, 'courtyard_floor').sprites
+        )
+
         # Shift objects for initial positioning
         for object in self.gameobjects.sprites():
             object.rect.move_ip(-50, 600)

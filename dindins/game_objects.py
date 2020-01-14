@@ -126,3 +126,26 @@ class Door(BaseObject):
         """
         box = DialogueBox(self.message, (WIDTH / 2, HEIGHT * .8))
         return box
+
+
+class Floor:
+    def __init__(self, pos, width, height, name):
+        self.sprites = []
+
+        x = 0
+        y = 0
+
+        tile = pygame.image.load(f'{ASSETS}/terrain/tile.png')
+
+        done = False
+        while not done:
+            if x > width:
+                x = 0
+                y += 32
+
+            if y > height:
+                done = True
+                continue
+
+            self.sprites.append(BaseObject((pos[0] - x, pos[1] - y), tile, name))
+            x += 32
