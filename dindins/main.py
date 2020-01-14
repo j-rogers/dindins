@@ -166,6 +166,7 @@ class GameScreen(Screen):
             Door((440, 395), 50, 20, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
             Door((320, 395), 50, 20, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
             Door((510, 150), 20, 50, 'Study', 'study_door'),          # Study
+            Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
         )
 
         # Shift objects for initial positioning
