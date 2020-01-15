@@ -136,6 +136,11 @@ class GameScreen(Screen):
         self.player.add(Lucy())
         self.speed = 3
 
+        # Floor
+        self.gameobjects.add(
+            Floor((495, 18), 250, 250, 'courtyard_floor').sprites
+        )
+
         # Walls
         self.gameobjects.add(
             Wall((600, 210), 10, 875, 'hallway_east'),  # Hallway east wall
@@ -167,11 +172,6 @@ class GameScreen(Screen):
             Door((320, 395), 50, 20, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
             Door((510, 150), 20, 50, 'Study', 'study_door'),          # Study
             Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
-        )
-
-        # Floor
-        self.gameobjects.add(
-            Floor((700, 0), 200, 200, 'courtyard_floor').sprites
         )
 
         # Shift objects for initial positioning
