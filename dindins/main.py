@@ -138,15 +138,19 @@ class GameScreen(Screen):
 
         # Floor
         self.gameobjects.add(
-            Floor((495, 18), 250, 250, 'courtyard_floor').sprites
+            Floor((495, 18), 250, 250, 'courtyard_floor', type='tile').sprites,
+            Floor((580, 630), 96, 64, 'lobby_floor').sprites,
+            Floor((589, 534), 64, 800, 'hallway_floor').sprites,
+            Floor((493, 94), 32, 64, 'alcove_floor').sprites,
+
         )
 
         # Walls
         self.gameobjects.add(
             Wall((600, 210), 10, 875, 'hallway_east'),  # Hallway east wall
-            Wall((530, 645), 150, 10, 'lobby_south'),  # Lobby south wall
-            Wall((460, 595), 10, 100, 'lobby_west'),  # Lobby west wall
-            Wall((485, 545), 60, 10, 'lobby_north'),   # Lobby north wall
+            Wall((535, 645), 140, 10, 'lobby_south'),  # Lobby south wall
+            Wall((470, 595), 10, 100, 'lobby_west'),  # Lobby west wall
+            Wall((490, 545), 50, 10, 'lobby_north'),   # Lobby north wall
             Wall((510, 470), 10, 160, 'hallway_west_lobbytobedroom'),  # Hallway west wall (lobby -> bedroom)
             Wall((380, 395), 250, 10, 'bedroom_south'),  # Bedroom south wall
             Wall((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
@@ -167,7 +171,7 @@ class GameScreen(Screen):
         self.gameobjects.add(
             Door((560, 645), 50, 20, 'Scary door', 'front_door'),     # Front door
             Door((510, 450), 20, 50, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
-            Door((460, 595), 20, 50, 'storage door', 'storage_door'),   # Room 1
+            Door((470, 595), 20, 50, 'storage door', 'storage_door'),   # Room 1
             Door((440, 395), 50, 20, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
             Door((320, 395), 50, 20, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
             Door((510, 150), 20, 50, 'Study', 'study_door'),          # Study
@@ -176,7 +180,7 @@ class GameScreen(Screen):
 
         # Shift objects for initial positioning
         for object in self.gameobjects.sprites():
-            object.rect.move_ip(-50, 600)
+            object.rect.move_ip(-50, 400)
 
     def handle(self, event):
         # Space to interact with objects
