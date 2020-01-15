@@ -91,7 +91,7 @@ class Wall(BaseObject):
             width: Width of the wall
             height: Height of the wall
         """
-        image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
+        image = pygame.image.load(f'{ASSETS}/terrain/wall.png')
         image = pygame.transform.scale(image, (width, height))
         super().__init__(pos, image, name, collide=True)
 
@@ -110,7 +110,7 @@ class Door(BaseObject):
             height: Height of the door
             message: Message to give to the user when door is used
         """
-        image = pygame.image.load(f'{ASSETS}/terrain/wall.jpg')
+        image = pygame.image.load(f'{ASSETS}/terrain/wall.png')
         image = pygame.transform.scale(image, (width, height))
         super().__init__(pos, image, name, interactable=True)
 
@@ -138,7 +138,7 @@ class Floor:
         images = {
             'tile': pygame.image.load(f'{ASSETS}/terrain/tile.png'),
             'floorboard': pygame.image.load(f'{ASSETS}/terrain/floorboard.png'),
-            'carpet': pygame.image.load(f'{ASSETS}/terrain/carpet.png')
+            'carpet': pygame.image.load(f'{ASSETS}/terrain/carpet.png'),
         }
 
         image = images[type]
