@@ -138,16 +138,17 @@ class GameScreen(Screen):
 
         # Floor
         self.gameobjects.add(
+            Floor((590, -226), 320, 224, 'living_floor').sprites,
             Floor((495, 18), 250, 250, 'courtyard_floor', type='tile').sprites,
             Floor((580, 630), 96, 64, 'lobby_floor').sprites,
             Floor((589, 534), 64, 800, 'hallway_floor').sprites,
             Floor((493, 94), 32, 64, 'alcove_floor').sprites,
-
+            Floor((495, 376), 224, 160, 'bedroom_floor', type='carpet').sprites
         )
 
         # Walls
         self.gameobjects.add(
-            Wall((600, 210), 10, 875, 'hallway_east'),  # Hallway east wall
+            Wall((600, 210), 11, 875, 'hallway_east'),  # Hallway east wall
             Wall((535, 645), 140, 10, 'lobby_south'),  # Lobby south wall
             Wall((470, 595), 10, 100, 'lobby_west'),  # Lobby west wall
             Wall((490, 545), 50, 10, 'lobby_north'),   # Lobby north wall
@@ -161,7 +162,7 @@ class GameScreen(Screen):
             Wall((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
             Wall((510, -100), 10, 250, 'hallway_west_glass'), # Hallway west wall, looking into courtyard
             Wall((385, -220), 250, 10, 'living_south_glass'),   # Living room south wall, looking into courtyard
-            Wall((260, -220), 10, 500, 'courtyard_kitchen_west'),   # Courtyard and kitchen west wall
+            Wall((259, -219), 11, 502, 'courtyard_kitchen_west'),   # Courtyard and kitchen west wall
             Wall((355, 30), 200, 10, 'study_north_glass'),  # Study north wall, looking into courtyard
             Wall((435, -465), 355, 10, 'living_north'),     # Living room/kitchen north wall
             Wall((610, -345), 10, 250, 'living_east')      # Living room east wall

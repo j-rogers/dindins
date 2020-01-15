@@ -137,7 +137,8 @@ class Floor:
 
         images = {
             'tile': pygame.image.load(f'{ASSETS}/terrain/tile.png'),
-            'floorboard': pygame.image.load(f'{ASSETS}/terrain/floorboard.png')
+            'floorboard': pygame.image.load(f'{ASSETS}/terrain/floorboard.png'),
+            'carpet': pygame.image.load(f'{ASSETS}/terrain/carpet.png')
         }
 
         image = images[type]
