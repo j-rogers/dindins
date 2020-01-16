@@ -201,7 +201,7 @@ class GameScreen(Screen):
 
         # Other objects
         self.gameobjects.add(
-            HideObject((320, 295), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed'),
+            HideObject((390, 230), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed'),
             HideObject((425, -280), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
         )
 
