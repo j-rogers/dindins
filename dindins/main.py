@@ -187,19 +187,21 @@ class GameScreen(Screen):
         )
 
         # Doors
+        greysurface = pygame.Surface((50, 20))
+        greysurface.fill(GREY)
         self.gameobjects.add(
-            Door((560, 645), 50, 20, 'Scary door', 'front_door'),     # Front door
-            Door((510, 450), 20, 50, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
-            Door((470, 595), 20, 50, 'storage door', 'storage_door'),   # Room 1
-            Door((440, 395), 50, 20, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
-            Door((320, 395), 50, 20, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
-            Door((510, 150), 20, 50, 'Study', 'study_door'),          # Study
-            Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
+            DialogueBoxTile((560, 645), greysurface, 'Scary door', 'front_door'),     # Front door
+            DialogueBoxTile((510, 450), greysurface, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
+            DialogueBoxTile((470, 595), greysurface, 'storage door', 'storage_door'),   # Room 1
+            DialogueBoxTile((440, 395), greysurface, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
+            DialogueBoxTile((320, 395), greysurface, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
+            DialogueBoxTile((510, 150), greysurface, 'Study', 'study_door'),          # Study
+            DialogueBoxTile((345, -465), greysurface, 'scary sounds door', 'garage_door')    # Garage
         )
 
         self.gameobjects.add(
             Bed((320, 295), 'bed'),
-            BaseObject((425, -275), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
+            BaseObject((425, -280), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
         )
 
         # Shift objects for initial positioning
@@ -228,9 +230,8 @@ class GameScreen(Screen):
                     for object in self.gameobjects.interactables():
                         # Allows for interaction with collidable objects
                         if pygame.sprite.collide_rect_ratio(1.25)(self.player.sprite, object):
-                            r = object.interact()
-                            if type(r) == DialogueBox:
-                                self.dialogue.append(r)
+                            object.interact()
+
                 # Stop hiding
                 elif self.hiding:
                     # Resume player
@@ -290,6 +291,12 @@ class GameScreen(Screen):
                 for object in self.gameobjects.sprites():
                     object.move(x, y)
 
+        # Render given objects
+        elif event.type == RENDER:
+            for object in event.objects:
+                if type(object) == DialogueBox:
+                    self.dialogue.append(object)
+
     def update(self):
         """Updates the screen
 
@@ -323,7 +330,6 @@ class GameScreen(Screen):
             object.move(speed_x, 0)
 
         # Reset objects if collision occurred
-        #if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
         if self._collide():
             for object in self.gameobjects.sprites():
                 object.move(-1 * speed_x, 0)
@@ -333,7 +339,6 @@ class GameScreen(Screen):
             object.move(0, speed_y)
 
         # Reset objects if collision occurred
-        #if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
         if self._collide():
             for object in self.gameobjects.sprites():
                 object.move(0, -1 * speed_y)

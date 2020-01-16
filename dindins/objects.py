@@ -78,8 +78,7 @@ class BaseObject(pygame.sprite.Sprite):
     def interact(self):
         """Triggered when player interacts with the object
 
-        To be implemented in objects that have the interactable property set. This method should return any GUI objects
-        (e.g. Dialogue boxes) to be rendered.
+        To be implemented in objects that have the interactable property set.
         """
         raise NotImplementedError
 
@@ -97,12 +96,12 @@ class BaseObject(pygame.sprite.Sprite):
             self.boundingbox.move_ip(x, y)
 
 
-class Door(BaseObject):
-    """Door
+class DialogueBoxTile(BaseObject):
+    """An interactable tile that creates a dialogue box
 
     Doors are interactable objects that present the player with a dialogue box.
     """
-    def __init__(self, pos, width, height, message, name):
+    def __init__(self, pos, image, message, name):
         """Init
 
         Args:
@@ -111,10 +110,7 @@ class Door(BaseObject):
             height: Height of the door
             message: Message to give to the user when door is used
         """
-        image = pygame.image.load(f'{ASSETS}/terrain/wall.png')
-        image = pygame.transform.scale(image, (width, height))
         super().__init__(pos, image, name, interactable=True)
-
         self.message = message
 
     def interact(self):
@@ -126,7 +122,7 @@ class Door(BaseObject):
             Dialogue box
         """
         box = DialogueBox(self.message, (WIDTH / 2, HEIGHT * .8))
-        return box
+        pygame.event.post(pygame.event.Event(RENDER, {'objects': [box]}))
 
 
 class Bed(BaseObject):
