@@ -191,14 +191,15 @@ class GameScreen(Screen):
         greysurface.fill(GREY)
         self.gameobjects.add(
             DialogueBoxObject((560, 645), greysurface, 'Scary door', 'front_door'),     # Front door
-            DialogueBoxObject((510, 450), greysurface, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
-            DialogueBoxObject((470, 595), greysurface, 'storage door', 'storage_door'),   # Room 1
+            DialogueBoxObject((510, 450), pygame.transform.rotate(greysurface, 90), 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
+            DialogueBoxObject((470, 595), pygame.transform.rotate(greysurface, 90), 'storage door', 'storage_door'),   # Room 1
             DialogueBoxObject((440, 395), greysurface, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
             DialogueBoxObject((320, 395), greysurface, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
-            DialogueBoxObject((510, 150), greysurface, 'Study', 'study_door'),          # Study
+            DialogueBoxObject((510, 150), pygame.transform.rotate(greysurface, 90), 'Study', 'study_door'),          # Study
             DialogueBoxObject((345, -465), greysurface, 'scary sounds door', 'garage_door')    # Garage
         )
 
+        # Other objects
         self.gameobjects.add(
             HideObject((320, 295), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed'),
             HideObject((425, -280), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
