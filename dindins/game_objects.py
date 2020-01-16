@@ -24,7 +24,7 @@ class ObjectsGroup(pygame.sprite.Group):
     def colliders(self):
         colliders = []
         for object in self.sprites():
-            if object.collide:
+            if object.boundingbox:
                 colliders.append(object)
 
         return pygame.sprite.Group(colliders)
@@ -59,7 +59,7 @@ class BaseObject(pygame.sprite.Sprite):
         collide: Bool indicating if collision should be checked with this object (defaults to False)
         interactable: Bool indicating if this object can be interacted with (defaults to False)
     """
-    def __init__(self, pos, image, name, collide=False, interactable=False):
+    def __init__(self, pos, image, name, collide=False, interactable=False, boundingbox=None):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
@@ -70,6 +70,12 @@ class BaseObject(pygame.sprite.Sprite):
         self.collide = collide
         self.interactable = interactable
 
+        if boundingbox:
+            self.boundingbox = pygame.Rect((self.rect.left, self.rect.top), boundingbox)
+            self.boundingbox.center = pos
+        else:
+            self.boundingbox = boundingbox
+
     def interact(self):
         """Triggered when player interacts with the object
 
@@ -77,6 +83,11 @@ class BaseObject(pygame.sprite.Sprite):
         (e.g. Dialogue boxes) to be rendered.
         """
         raise NotImplementedError
+
+    def move(self, x, y):
+        self.rect.move_ip(x, y)
+        if self.boundingbox:
+            self.boundingbox.move_ip(x, y)
 
 
 class Wall(BaseObject):
@@ -95,7 +106,7 @@ class Wall(BaseObject):
         """
         image = pygame.image.load(f'{ASSETS}/terrain/wall.png')
         image = pygame.transform.scale(image, (width, height))
-        super().__init__(pos, image, name, collide=True)
+        super().__init__(pos, image, name, boundingbox=(width, height))
 
 
 class Door(BaseObject):
@@ -135,10 +146,17 @@ class Bed(BaseObject):
         image = pygame.image.load(f'{ASSETS}/objects/bed.png')
         if orientation == 'horizontal':
             image = pygame.transform.rotate(image, 90)
-        super().__init__(pos, image, name, collide=True, interactable=True)
+        super().__init__(pos, image, name, boundingbox=(96, 64), interactable=True)
 
     def interact(self):
         pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))
+
+
+class BoundingBox(BaseObject):
+    def __init__(self, pos, width, height, name):
+        image = pygame.image.load(f'{ASSETS}/terrain/transparent.png')
+        image = pygame.transform.scale(image, (width, height))
+        super().__init__(pos, image, name, boundingbox=(width, height))
 
 
 def floor(pos, width, height, name, type='floorboard'):

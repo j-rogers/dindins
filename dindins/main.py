@@ -197,18 +197,23 @@ class GameScreen(Screen):
             Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
         )
 
-        table = BaseObject((425, -270), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', collide=True)
-        table.rect.h -= 32
-        table.rect.w -= 24
+        table = BaseObject((425, -270), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table')
+        table_box = BoundingBox((425, -280), 48, 32, 'table_box')
 
         self.gameobjects.add(
             Bed((320, 295), 'bed'),
             table,
+            table_box
         )
 
         # Shift objects for initial positioning
         for object in self.gameobjects.sprites():
-            object.rect.move_ip(-50, 400)
+            object.move(-50, 400)
+
+    def _collide(self):
+        for object in self.gameobjects.colliders():
+            if self.player.sprite.rect.colliderect(object.boundingbox):
+                return True
 
     def handle(self, event):
         """Handles in game events
@@ -239,7 +244,7 @@ class GameScreen(Screen):
 
                     # Revert objects using saved offset
                     for object in self.gameobjects.sprites():
-                        object.rect.move_ip(-1 * self.temp[0],  -1 * self.temp[1])
+                        object.move(-1 * self.temp[0],  -1 * self.temp[1])
 
         # Pause the game
         elif event.type == PAUSE:
@@ -273,7 +278,7 @@ class GameScreen(Screen):
 
                 # Calculate the offset
                 if object[0] < pos[0]:
-                    x =  pos[0] - object[0]
+                    x = pos[0] - object[0]
                 else:
                     x = object[0] - pos[0]
 
@@ -287,7 +292,7 @@ class GameScreen(Screen):
 
                 # Move objects
                 for object in self.gameobjects.sprites():
-                    object.rect.move_ip(x, y)
+                    object.move(x, y)
 
     def update(self):
         """Updates the screen
@@ -319,21 +324,23 @@ class GameScreen(Screen):
 
         # Shift all objects on x axis
         for object in self.gameobjects.sprites():
-            object.rect.move_ip(speed_x, 0)
+            object.move(speed_x, 0)
 
         # Reset objects if collision occurred
-        if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
+        #if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
+        if self._collide():
             for object in self.gameobjects.sprites():
-                object.rect.move_ip(-1 * speed_x, 0)
+                object.move(-1 * speed_x, 0)
 
         # Shift all objects on y axis
         for object in self.gameobjects.sprites():
-            object.rect.move_ip(0, speed_y)
+            object.move(0, speed_y)
 
         # Reset objects if collision occurred
-        if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
+        #if pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.colliders()):
+        if self._collide():
             for object in self.gameobjects.sprites():
-                object.rect.move_ip(0, -1 * speed_y)
+                object.move(0, -1 * speed_y)
 
         return self
 
