@@ -190,18 +190,18 @@ class GameScreen(Screen):
         greysurface = pygame.Surface((50, 20))
         greysurface.fill(GREY)
         self.gameobjects.add(
-            DialogueBoxTile((560, 645), greysurface, 'Scary door', 'front_door'),     # Front door
-            DialogueBoxTile((510, 450), greysurface, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
-            DialogueBoxTile((470, 595), greysurface, 'storage door', 'storage_door'),   # Room 1
-            DialogueBoxTile((440, 395), greysurface, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
-            DialogueBoxTile((320, 395), greysurface, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
-            DialogueBoxTile((510, 150), greysurface, 'Study', 'study_door'),          # Study
-            DialogueBoxTile((345, -465), greysurface, 'scary sounds door', 'garage_door')    # Garage
+            DialogueBoxObject((560, 645), greysurface, 'Scary door', 'front_door'),     # Front door
+            DialogueBoxObject((510, 450), greysurface, 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
+            DialogueBoxObject((470, 595), greysurface, 'storage door', 'storage_door'),   # Room 1
+            DialogueBoxObject((440, 395), greysurface, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
+            DialogueBoxObject((320, 395), greysurface, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
+            DialogueBoxObject((510, 150), greysurface, 'Study', 'study_door'),          # Study
+            DialogueBoxObject((345, -465), greysurface, 'scary sounds door', 'garage_door')    # Garage
         )
 
         self.gameobjects.add(
-            Bed((320, 295), 'bed'),
-            BaseObject((425, -280), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
+            HideObject((320, 295), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed'),
+            HideObject((425, -280), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
         )
 
         # Shift objects for initial positioning

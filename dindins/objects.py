@@ -96,7 +96,7 @@ class BaseObject(pygame.sprite.Sprite):
             self.boundingbox.move_ip(x, y)
 
 
-class DialogueBoxTile(BaseObject):
+class DialogueBoxObject(BaseObject):
     """An interactable tile that creates a dialogue box
 
     Doors are interactable objects that present the player with a dialogue box.
@@ -125,24 +125,23 @@ class DialogueBoxTile(BaseObject):
         pygame.event.post(pygame.event.Event(RENDER, {'objects': [box]}))
 
 
-class Bed(BaseObject):
-    """Bed
+class HideObject(BaseObject):
+    """Object that the player can hide under
 
-    The bed is an interactable object that allows the player the hide under it. This is achieved by posting the HIDE,
+    This object is an interactable object that allows the player the hide under it. This is achieved by posting the HIDE,
     allowing the game screen to handle the rest.
     """
-    def __init__(self, pos, name, orientation='horizontal'):
+    def __init__(self, pos, image, name, boundingbox=None):
         """Init
 
         Args:
             pos: Position of the center of the object
+            image: pygame.Surface of the object
             name: Name of the object
-            orientation: Orientation of the object (Defaults to horizontal)
+            boundingbox: Bounding box of the object. If none is set then it will default to the size of the image.
         """
-        image = pygame.image.load(f'{ASSETS}/objects/bed.png')
-        if orientation == 'horizontal':
-            image = pygame.transform.rotate(image, 90)
-        super().__init__(pos, image, name, boundingbox=(96, 64), interactable=True)
+        box = (image.get_width(), image.get_height()) if not boundingbox else boundingbox
+        super().__init__(pos, image, name, boundingbox=box, interactable=True)
 
     def interact(self):
         """Posts the HIDE event"""
