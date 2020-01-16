@@ -175,10 +175,10 @@ class GameScreen(Screen):
             Wall((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
             Wall((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
             Wall((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
-            Wall((480, 110), 50, 10, 'alcove_south'),    # A918lcove south wall
+            Wall((480, 110), 50, 10, 'alcove_south'),    # Alcove south wall
             Wall((450, 65), 10, 100, 'alcove_west'),  # Alcove west wall
             Wall((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
-            Wall((510, -100), 10, 250, 'hallway_west_glass'), # Hallway west wall, looking into courtyard
+            Wall((510, -100), 10, 250, 'hallway_west_glass'),  # Hallway west wall, looking into courtyard
             Wall((385, -220), 250, 10, 'living_south_glass'),   # Living room south wall, looking into courtyard
             Wall((259, -219), 11, 502, 'courtyard_kitchen_west'),   # Courtyard and kitchen west wall
             Wall((355, 30), 200, 10, 'study_north_glass'),  # Study north wall, looking into courtyard
@@ -197,8 +197,13 @@ class GameScreen(Screen):
             Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
         )
 
+        table = BaseObject((425, -270), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', collide=True)
+        table.rect.h -= 32
+        table.rect.w -= 24
+
         self.gameobjects.add(
-            Bed((320, 295), 'bed')
+            Bed((320, 295), 'bed'),
+            table,
         )
 
         # Shift objects for initial positioning
