@@ -56,8 +56,8 @@ class BaseObject(pygame.sprite.Sprite):
         image: Image surface of the sprite
         rect: pygame.Rect of the image
         name: Unique name of the object to identify it and retrieve it in a group
-        collide: Bool indicating if collision should be checked with this object (defaults to False)
         interactable: Bool indicating if this object can be interacted with (defaults to False)
+        boundingbox: pygame.Rect used to detect collision
     """
     def __init__(self, pos, image, name, interactable=False, boundingbox=None):
         super().__init__()
@@ -70,8 +70,11 @@ class BaseObject(pygame.sprite.Sprite):
         self.interactable = interactable
 
         if boundingbox:
-            self.boundingbox = pygame.Rect((self.rect.left, self.rect.top), boundingbox)
-            self.boundingbox.center = pos
+            if boundingbox == 'image':
+                self.boundingbox = self.rect.copy()
+            else:
+                self.boundingbox = pygame.Rect((self.rect.left, self.rect.top), boundingbox)
+                self.boundingbox.center = pos
         else:
             self.boundingbox = boundingbox
 
