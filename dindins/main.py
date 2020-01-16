@@ -3,7 +3,7 @@ import pygame
 from dindins.lucy import Lucy
 from dindins.settings import *
 from dindins.gui import *
-from dindins.game_objects import *
+from dindins.objects import *
 
 
 class Screen(pygame.Surface):
@@ -156,34 +156,34 @@ class GameScreen(Screen):
 
         # Floor
         self.gameobjects.add(
-            floor((590, -226), 10, 7, 'living_floor'),
-            floor((495, 18), 7, 7, 'courtyard_floor', type='tile'),
-            floor((580, 630), 3, 2, 'lobby_floor'),
-            floor((589, 534), 2, 25, 'hallway_floor'),
-            floor((493, 94), 1, 2, 'alcove_floor'),
-            floor((495, 376), 7, 5, 'bedroom_floor', type='carpet')
+            tileset((590, -226), 10, 7, 'living_floor'),
+            tileset((495, 18), 7, 7, 'courtyard_floor', type='tile'),
+            tileset((580, 630), 3, 2, 'lobby_floor'),
+            tileset((589, 534), 2, 25, 'hallway_floor'),
+            tileset((493, 94), 1, 2, 'alcove_floor'),
+            tileset((495, 376), 7, 5, 'bedroom_floor', type='carpet')
         )
 
         # Walls
         self.gameobjects.add(
-            Wall((600, 210), 11, 875, 'hallway_east'),  # Hallway east wall
-            Wall((535, 645), 140, 10, 'lobby_south'),  # Lobby south wall
-            Wall((470, 595), 10, 100, 'lobby_west'),  # Lobby west wall
-            Wall((490, 545), 50, 10, 'lobby_north'),   # Lobby north wall
-            Wall((510, 470), 10, 160, 'hallway_west_lobbytobedroom'),  # Hallway west wall (lobby -> bedroom)
-            Wall((380, 395), 250, 10, 'bedroom_south'),  # Bedroom south wall
-            Wall((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
-            Wall((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
-            Wall((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
-            Wall((480, 110), 50, 10, 'alcove_south'),    # Alcove south wall
-            Wall((450, 65), 10, 100, 'alcove_west'),  # Alcove west wall
-            Wall((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
-            Wall((510, -100), 10, 250, 'hallway_west_glass'),  # Hallway west wall, looking into courtyard
-            Wall((385, -220), 250, 10, 'living_south_glass'),   # Living room south wall, looking into courtyard
-            Wall((259, -219), 11, 502, 'courtyard_kitchen_west'),   # Courtyard and kitchen west wall
-            Wall((355, 30), 200, 10, 'study_north_glass'),  # Study north wall, looking into courtyard
-            Wall((435, -465), 355, 10, 'living_north'),     # Living room/kitchen north wall
-            Wall((610, -345), 10, 250, 'living_east')      # Living room east wall
+            tile((600, 210), 11, 875, 'hallway_east'),  # Hallway east wall
+            tile((535, 645), 140, 10, 'lobby_south'),  # Lobby south wall
+            tile((470, 595), 10, 100, 'lobby_west'),  # Lobby west wall
+            tile((490, 545), 50, 10, 'lobby_north'),   # Lobby north wall
+            tile((510, 470), 10, 160, 'hallway_west_lobbytobedroom'),  # Hallway west wall (lobby -> bedroom)
+            tile((380, 395), 250, 10, 'bedroom_south'),  # Bedroom south wall
+            tile((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
+            tile((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
+            tile((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
+            tile((480, 110), 50, 10, 'alcove_south'),    # Alcove south wall
+            tile((450, 65), 10, 100, 'alcove_west'),  # Alcove west wall
+            tile((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
+            tile((510, -100), 10, 250, 'hallway_west_glass'),  # Hallway west wall, looking into courtyard
+            tile((385, -220), 250, 10, 'living_south_glass'),   # Living room south wall, looking into courtyard
+            tile((259, -219), 11, 502, 'courtyard_kitchen_west'),   # Courtyard and kitchen west wall
+            tile((355, 30), 200, 10, 'study_north_glass'),  # Study north wall, looking into courtyard
+            tile((435, -465), 355, 10, 'living_north'),     # Living room/kitchen north wall
+            tile((610, -345), 10, 250, 'living_east')      # Living room east wall
         )
 
         # Doors
@@ -197,13 +197,9 @@ class GameScreen(Screen):
             Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
         )
 
-        table = BaseObject((425, -270), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table')
-        table_box = BoundingBox((425, -280), 48, 32, 'table_box')
-
         self.gameobjects.add(
             Bed((320, 295), 'bed'),
-            table,
-            table_box
+            BaseObject((425, -275), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
         )
 
         # Shift objects for initial positioning

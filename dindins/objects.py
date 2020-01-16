@@ -59,7 +59,7 @@ class BaseObject(pygame.sprite.Sprite):
         collide: Bool indicating if collision should be checked with this object (defaults to False)
         interactable: Bool indicating if this object can be interacted with (defaults to False)
     """
-    def __init__(self, pos, image, name, collide=False, interactable=False, boundingbox=None):
+    def __init__(self, pos, image, name, interactable=False, boundingbox=None):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
@@ -67,7 +67,6 @@ class BaseObject(pygame.sprite.Sprite):
 
         self.name = name
 
-        self.collide = collide
         self.interactable = interactable
 
         if boundingbox:
@@ -85,28 +84,17 @@ class BaseObject(pygame.sprite.Sprite):
         raise NotImplementedError
 
     def move(self, x, y):
+        """Shifts the object
+
+        Shifts the object by x and y. Additionally moves the bounding box if one is present.
+
+        Args:
+            x: Pixel value to move the object horizontally
+            y: Pixel value to move the object vertically
+        """
         self.rect.move_ip(x, y)
         if self.boundingbox:
             self.boundingbox.move_ip(x, y)
-
-
-class Wall(BaseObject):
-    """Wall
-
-    This is a simple wall that is used for barriers around the map.  The image is just a jpg of a solid colour so it can
-    be transformed without stretching any textures. As the wall acts as a barrier, the collide property is set.
-    """
-    def __init__(self, pos, width, height, name):
-        """Init
-
-        Args:
-            pos: Tuple in form (x, y) providing coordinates of where to place the wall
-            width: Width of the wall
-            height: Height of the wall
-        """
-        image = pygame.image.load(f'{ASSETS}/terrain/wall.png')
-        image = pygame.transform.scale(image, (width, height))
-        super().__init__(pos, image, name, boundingbox=(width, height))
 
 
 class Door(BaseObject):
@@ -142,25 +130,49 @@ class Door(BaseObject):
 
 
 class Bed(BaseObject):
+    """Bed
+
+    The bed is an interactable object that allows the player the hide under it. This is achieved by posting the HIDE,
+    allowing the game screen to handle the rest.
+    """
     def __init__(self, pos, name, orientation='horizontal'):
+        """Init
+
+        Args:
+            pos: Position of the center of the object
+            name: Name of the object
+            orientation: Orientation of the object (Defaults to horizontal)
+        """
         image = pygame.image.load(f'{ASSETS}/objects/bed.png')
         if orientation == 'horizontal':
             image = pygame.transform.rotate(image, 90)
         super().__init__(pos, image, name, boundingbox=(96, 64), interactable=True)
 
     def interact(self):
+        """Posts the HIDE event"""
         pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))
 
 
-class BoundingBox(BaseObject):
-    def __init__(self, pos, width, height, name):
-        image = pygame.image.load(f'{ASSETS}/terrain/transparent.png')
-        image = pygame.transform.scale(image, (width, height))
-        super().__init__(pos, image, name, boundingbox=(width, height))
+def tile(pos, width, height, name, collide=True):
+    """Creates a tile of a solid colour
+
+    This is a simple function that creates a tile of given width and height of a solid colour.
+
+    Args:
+        pos: Position of the center of the tile
+        width: Width of the tile in pixels
+        height: Height of the tile in pixels
+        name: Name of the tile
+        collide: Determines if the tile should have collision (Defaults to true)
+    """
+    surface = pygame.Surface((width, height))
+    surface.fill(GREY)
+    boundingbox = (width, height) if collide else None
+    return BaseObject(pos, surface, name, boundingbox=boundingbox)
 
 
-def floor(pos, width, height, name, type='floorboard'):
-    """Creates a list of tiles in a given area for flooring
+def tileset(pos, width, height, name, type='floorboard'):
+    """Creates a list of tiles in a given area
 
     This method uses the given width and height to create a list of tiles that fit in the given area. The tiles are each
     32x32, and the width and height must be given in number of tiles.
@@ -173,8 +185,6 @@ def floor(pos, width, height, name, type='floorboard'):
         type: Type of image to use for the sprites (defaults to floorboard) Possible options include tile, floorboard,
             and carpet.
     """
-
-
     # Get image to use
     images = {
         'tile': pygame.image.load(f'{ASSETS}/terrain/tile.png'),
