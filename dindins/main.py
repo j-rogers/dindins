@@ -129,7 +129,21 @@ class MainMenu(Screen):
 
 
 class GameScreen(Screen):
+    """In game screen
+
+    This screen handles all interactions and rendering for the DinDins game. The update method is used to move objects
+    around the screen to keep the camera centered on the player. The handle method handles in game events such as
+    object interaction, pausing/resuming, and hiding.
+
+    Attributes:
+        player: pygame.sprite.GroupSingle containing the sprite of the player
+        speed: Int describing the movement speed in pixels per frame
+        hiding: Boolean indicating if the player is currently hiding
+        temp: Variable used to temporarily store any information
+        gameobjects: pygame.sprite.Group of every other object in the game
+    """
     def __init__(self):
+        """Loads initial objects"""
         super().__init__()
 
         # Add player character
@@ -138,7 +152,7 @@ class GameScreen(Screen):
         # State variables
         self.speed = 3
         self.hiding = False
-        self.temp
+        self.temp = None
 
         # Floor
         self.gameobjects.add(
@@ -192,6 +206,14 @@ class GameScreen(Screen):
             object.rect.move_ip(-50, 400)
 
     def handle(self, event):
+        """Handles in game events
+
+        This method handles all events in game. This includes pressing the space bar to interact with objects,
+        pausing/resuming, and hiding.
+
+        Args:
+            event: pygame.Event object to handle
+        """
         # Space to interact with objects
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
@@ -205,9 +227,12 @@ class GameScreen(Screen):
                                 self.dialogue.append(r)
                 # Stop hiding
                 elif self.hiding:
+                    # Resume player
                     self.player.sprite.pause = False
                     self.hiding = False
                     self.speed = 3
+
+                    # Revert objects using saved offset
                     for object in self.gameobjects.sprites():
                         object.rect.move_ip(-1 * self.temp[0],  -1 * self.temp[1])
 
@@ -224,19 +249,24 @@ class GameScreen(Screen):
         # Hide
         # Hiding pauses only the player (not NPCs), and makes the player sprite transparent.
         elif event.type == HIDE:
+            # Pause player
             self.player.sprite.pause = True
             self.speed = 0
             self.hiding = True
 
+            # Make player transparent
             self.player.sprite.image = pygame.image.load(f'{ASSETS}/terrain/transparent.png')
 
+            # If move is set to false then move camera to center of hiding object
             if not event.move:
+                # Get player and object coordinates
                 object = event.object.rect.center
                 pos = self.player.sprite.rect.center
 
                 x = 0
                 y = 0
 
+                # Calculate the offset
                 if object[0] < pos[0]:
                     x =  pos[0] - object[0]
                 else:
@@ -247,8 +277,10 @@ class GameScreen(Screen):
                 else:
                     y = object[1] - pos[1]
 
+                # Save offset so we can revert when not hiding
                 self.temp = (x, y)
 
+                # Move objects
                 for object in self.gameobjects.sprites():
                     object.rect.move_ip(x, y)
 
@@ -310,8 +342,17 @@ class OptionsMenu(Screen):
 
 
 class DinDins:
+    """Main loop
+
+    This class contains the entry point and main loop of the game.
+
+    Attributes:
+        running: Boolean indicating if the game is running
+        rootdisplay: pygame.display, the main window
+        clock: pygame.time.Clock for setting FPS
+    """
     def __init__(self):
-        """Initilises game"""
+        """Initialises game"""
         # Init pygame and set running to true
         pygame.init()
         self.running = True
@@ -332,6 +373,10 @@ class DinDins:
 
         The DinDins event handler processes events that concern the application as a whole, such as closing the game.
         Otherwise it passes the event to the current screens handler.
+
+        Args:
+            event: pygame.event.Event to handle
+            screen: Screen to pass event to
         """
         if event.type == pygame.QUIT:
             self.running = False
@@ -339,15 +384,10 @@ class DinDins:
             screen.handle(event)
 
     def _render(self, screen):
-        """Renders specified items
-
-        Renders and updates all specified items. Sprites use the pygame.sprite.Group object to execute all draw and
-        update calls. Objects and text are rendered/updated seperately.
+        """Renders the screen
 
         Args:
-            sprites: pygame.sprite.Group object containing all sprites to be rendered
-            text: Simple text boxes to be rendered
-            objects: Any object with an update() method
+            screen: Screen to be rendered
         """
         screen.render()
         self._rootdisplay.blit(screen, (0, 0))
@@ -355,7 +395,7 @@ class DinDins:
         pygame.display.flip()
 
     def run(self):
-        """Displays the main menu"""
+        """Main game loop"""
         screen = MainMenu()
         while self.running:
             # Handlers
