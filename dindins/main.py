@@ -206,7 +206,8 @@ class GameScreen(Screen):
             BaseObject((340, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser1', boundingbox=(32, 8)),
             BaseObject((440, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser2', boundingbox=(32, 8)),
             BaseObject((585, -385), pygame.image.load(f'{ASSETS}/objects/tv.png'), 'tv', boundingbox=(24, 64)),
-            BaseObject((400, -320), pygame.image.load(f'{ASSETS}/objects/bench.png'), 'bench', boundingbox=(64, 64))
+            BaseObject((400, -410), pygame.image.load(f'{ASSETS}/objects/bench1.png'), 'bench1', boundingbox=(64, 64)),
+            BaseObject((350, -410), pygame.image.load(f'{ASSETS}/objects/bench2.png'), 'bench2', boundingbox=(64, 64))
         )
 
         # Shift objects for initial positioning
