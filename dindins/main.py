@@ -201,8 +201,10 @@ class GameScreen(Screen):
 
         # Other objects
         self.gameobjects.add(
-            HideObject((390, 230), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed'),
+            HideObject((390, 210), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed'),
             HideObject((425, -280), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(48, 32)),
+            BaseObject((340, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser1', boundingbox=(32, 8)),
+            BaseObject((440, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser2', boundingbox=(32, 8))
         )
 
         # Shift objects for initial positioning
