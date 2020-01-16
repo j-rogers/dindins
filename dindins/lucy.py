@@ -17,6 +17,7 @@ class Lucy(pygame.sprite.Sprite):
         self.index = 0
         self.ticker = 0
         self.rate = 2
+        self.pause = False
 
         # Idle
         self.idle = {
@@ -76,27 +77,25 @@ class Lucy(pygame.sprite.Sprite):
         # If up/down and either left or right are pressed, the up/down animation should be used. So, the left/right
         # animations are only used if up or down are NOT being pressed. Additionally, the ticker should be reset if we
         # are changing directions, in order to immediately play the new animation.
-        if keystate[pygame.K_LEFT] and not (keystate[pygame.K_UP] or keystate[pygame.K_DOWN]):
-            self.ticker = 0 if self.direction != 'left' else self.ticker
-            self.direction = 'left'
-            self._playanimation(self.walk[self.direction])
-        if keystate[pygame.K_RIGHT] and not (keystate[pygame.K_UP] or keystate[pygame.K_DOWN]):
-            self.ticker = 0 if self.direction != 'right' else self.ticker
-            self.direction = 'right'
-            self._playanimation(self.walk[self.direction])
-        if keystate[pygame.K_UP]:
-            self.ticker = 0 if self.direction != 'up' else self.ticker
-            self.direction = 'up'
-            self._playanimation(self.walk[self.direction])
-        if keystate[pygame.K_DOWN]:
-            self.ticker = 0 if self.direction != 'down' else self.ticker
-            self.direction = 'down'
-            self._playanimation(self.walk[self.direction])
+        if not self.pause:
+            if keystate[pygame.K_LEFT] and not (keystate[pygame.K_UP] or keystate[pygame.K_DOWN]):
+                self.ticker = 0 if self.direction != 'left' else self.ticker
+                self.direction = 'left'
+                self._playanimation(self.walk[self.direction])
+            if keystate[pygame.K_RIGHT] and not (keystate[pygame.K_UP] or keystate[pygame.K_DOWN]):
+                self.ticker = 0 if self.direction != 'right' else self.ticker
+                self.direction = 'right'
+                self._playanimation(self.walk[self.direction])
+            if keystate[pygame.K_UP]:
+                self.ticker = 0 if self.direction != 'up' else self.ticker
+                self.direction = 'up'
+                self._playanimation(self.walk[self.direction])
+            if keystate[pygame.K_DOWN]:
+                self.ticker = 0 if self.direction != 'down' else self.ticker
+                self.direction = 'down'
+                self._playanimation(self.walk[self.direction])
 
-        # Play idle animation when not moving
-        if not keystate[pygame.K_LEFT] and not keystate[pygame.K_RIGHT] and not keystate[pygame.K_UP] and not keystate[pygame.K_DOWN]:
-            self.image = self.idle[self.direction]
-            self.ticker = 0
-
-
-
+            # Play idle animation when not moving
+            if not keystate[pygame.K_LEFT] and not keystate[pygame.K_RIGHT] and not keystate[pygame.K_UP] and not keystate[pygame.K_DOWN]:
+                self.image = self.idle[self.direction]
+                self.ticker = 0

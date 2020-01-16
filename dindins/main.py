@@ -134,7 +134,11 @@ class GameScreen(Screen):
 
         # Add player character
         self.player.add(Lucy())
+
+        # State variables
         self.speed = 3
+        self.hiding = False
+        self.temp
 
         # Floor
         self.gameobjects.add(
@@ -157,7 +161,7 @@ class GameScreen(Screen):
             Wall((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
             Wall((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
             Wall((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
-            Wall((480, 110), 50, 10, 'alcove_south'),    # Alcove south wall
+            Wall((480, 110), 50, 10, 'alcove_south'),    # A918lcove south wall
             Wall((450, 65), 10, 100, 'alcove_west'),  # Alcove west wall
             Wall((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
             Wall((510, -100), 10, 250, 'hallway_west_glass'), # Hallway west wall, looking into courtyard
@@ -179,6 +183,10 @@ class GameScreen(Screen):
             Door((345, -465), 50, 20, 'scary sounds door', 'garage_door')    # Garage
         )
 
+        self.gameobjects.add(
+            Bed((320, 295), 'bed')
+        )
+
         # Shift objects for initial positioning
         for object in self.gameobjects.sprites():
             object.rect.move_ip(-50, 400)
@@ -186,20 +194,63 @@ class GameScreen(Screen):
     def handle(self, event):
         # Space to interact with objects
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and self.speed:
-                object = pygame.sprite.spritecollideany(self.player.sprite, self.gameobjects.interactables())
-                if object:
-                    r = object.interact()
-                    if type(r) == DialogueBox:
-                        self.dialogue.append(r)
+            if event.key == pygame.K_SPACE:
+                # Regular interaction
+                if self.speed:
+                    for object in self.gameobjects.interactables():
+                        # Allows for interaction with collidable objects
+                        if pygame.sprite.collide_rect_ratio(1.25)(self.player.sprite, object):
+                            r = object.interact()
+                            if type(r) == DialogueBox:
+                                self.dialogue.append(r)
+                # Stop hiding
+                elif self.hiding:
+                    self.player.sprite.pause = False
+                    self.hiding = False
+                    self.speed = 3
+                    for object in self.gameobjects.sprites():
+                        object.rect.move_ip(-1 * self.temp[0],  -1 * self.temp[1])
 
         # Pause the game
         elif event.type == PAUSE:
             self.speed = 0
+            self.player.sprite.pause = True
 
         # Resume the game
         elif event.type == RESUME:
             self.speed = 3
+            self.player.sprite.pause = False
+
+        # Hide
+        # Hiding pauses only the player (not NPCs), and makes the player sprite transparent.
+        elif event.type == HIDE:
+            self.player.sprite.pause = True
+            self.speed = 0
+            self.hiding = True
+
+            self.player.sprite.image = pygame.image.load(f'{ASSETS}/terrain/transparent.png')
+
+            if not event.move:
+                object = event.object.rect.center
+                pos = self.player.sprite.rect.center
+
+                x = 0
+                y = 0
+
+                if object[0] < pos[0]:
+                    x =  pos[0] - object[0]
+                else:
+                    x = object[0] - pos[0]
+
+                if object[1] < pos[1]:
+                    y = pos[1] - object[1]
+                else:
+                    y = object[1] - pos[1]
+
+                self.temp = (x, y)
+
+                for object in self.gameobjects.sprites():
+                    object.rect.move_ip(x, y)
 
     def update(self):
         """Updates the screen

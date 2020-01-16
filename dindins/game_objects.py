@@ -1,6 +1,8 @@
 """Game Objects
 
-This file contains objects used within the DinDins game such as walls and items.
+This file contains functional objects used within DinDins. A functional object is an object that requires to be
+extended beyond the BaseObject class, such as an interactable object. Decorations and regular objects that have no
+functionality can simply be created from the BaseObject class.
 
 Author: Josh Rogers
 """
@@ -155,3 +157,14 @@ class Floor:
 
             self.sprites.append(BaseObject((pos[0] - x, pos[1] - y), image, name))
             x += 32
+
+
+class Bed(BaseObject):
+    def __init__(self, pos, name, orientation='horizontal'):
+        image = pygame.image.load(f'{ASSETS}/objects/bed.png')
+        if orientation == 'horizontal':
+            image = pygame.transform.rotate(image, 90)
+        super().__init__(pos, image, name, collide=True, interactable=True)
+
+    def interact(self):
+        pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))

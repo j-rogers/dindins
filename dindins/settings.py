@@ -14,3 +14,4 @@ BLUE = (0, 0, 255)
 # Custom events
 PAUSE = pygame.USEREVENT + 1
 RESUME = PAUSE + 1
+HIDE = RESUME + 1
