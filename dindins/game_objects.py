@@ -101,7 +101,7 @@ class Wall(BaseObject):
 class Door(BaseObject):
     """Door
 
-    Doors are interactable objects.
+    Doors are interactable objects that present the player with a dialogue box.
     """
     def __init__(self, pos, width, height, message, name):
         """Init
@@ -130,35 +130,6 @@ class Door(BaseObject):
         return box
 
 
-class Floor:
-    def __init__(self, pos, width, height, name, type='floorboard'):
-        self.sprites = []
-
-        x = 0
-        y = 0
-
-        images = {
-            'tile': pygame.image.load(f'{ASSETS}/terrain/tile.png'),
-            'floorboard': pygame.image.load(f'{ASSETS}/terrain/floorboard.png'),
-            'carpet': pygame.image.load(f'{ASSETS}/terrain/carpet.png'),
-        }
-
-        image = images[type]
-
-        done = False
-        while not done:
-            if x > width:
-                x = 0
-                y += 32
-
-            if y > height:
-                done = True
-                continue
-
-            self.sprites.append(BaseObject((pos[0] - x, pos[1] - y), image, name))
-            x += 32
-
-
 class Bed(BaseObject):
     def __init__(self, pos, name, orientation='horizontal'):
         image = pygame.image.load(f'{ASSETS}/objects/bed.png')
@@ -168,3 +139,49 @@ class Bed(BaseObject):
 
     def interact(self):
         pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))
+
+
+def floor(pos, width, height, name, type='floorboard'):
+    """Creates a list of tiles in a given area for flooring
+
+    This method uses the given width and height to create a list of tiles that fit in the given area. The tiles are each
+    32x32, and the width and height must be given in number of tiles.
+
+    Args:
+        pos: Tuple in the form (x, y) specifying the center of the area
+        width: Width of the area in tiles
+        height: Height of the area in tiles
+        name: Name of the area
+        type: Type of image to use for the sprites (defaults to floorboard) Possible options include tile, floorboard,
+            and carpet.
+    """
+
+
+    # Get image to use
+    images = {
+        'tile': pygame.image.load(f'{ASSETS}/terrain/tile.png'),
+        'floorboard': pygame.image.load(f'{ASSETS}/terrain/floorboard.png'),
+        'carpet': pygame.image.load(f'{ASSETS}/terrain/carpet.png'),
+    }
+    image = images[type]
+
+    # List of sprites
+    sprites = []
+
+    # Coordinates of current tile
+    x = 0
+    y = 0
+
+    # Build list until all rows are filled
+    while y <= height * 32:
+
+        # Place sprite (relative to given pos) and increment x by 32
+        sprites.append(BaseObject((pos[0] - x, pos[1] - y), image, name))
+        x += 32
+
+        # Go to next row if x exceeds width
+        if x > width * 32:
+            x = 0
+            y += 32
+
+    return sprites

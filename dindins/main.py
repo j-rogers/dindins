@@ -142,12 +142,12 @@ class GameScreen(Screen):
 
         # Floor
         self.gameobjects.add(
-            Floor((590, -226), 320, 224, 'living_floor').sprites,
-            Floor((495, 18), 250, 250, 'courtyard_floor', type='tile').sprites,
-            Floor((580, 630), 96, 64, 'lobby_floor').sprites,
-            Floor((589, 534), 64, 800, 'hallway_floor').sprites,
-            Floor((493, 94), 32, 64, 'alcove_floor').sprites,
-            Floor((495, 376), 224, 160, 'bedroom_floor', type='carpet').sprites
+            floor((590, -226), 10, 7, 'living_floor'),
+            floor((495, 18), 7, 7, 'courtyard_floor', type='tile'),
+            floor((580, 630), 3, 2, 'lobby_floor'),
+            floor((589, 534), 2, 25, 'hallway_floor'),
+            floor((493, 94), 1, 2, 'alcove_floor'),
+            floor((495, 376), 7, 5, 'bedroom_floor', type='carpet')
         )
 
         # Walls
