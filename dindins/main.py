@@ -166,24 +166,24 @@ class GameScreen(Screen):
 
         # Walls
         self.gameobjects.add(
-            tile((600, 210), 11, 875, 'hallway_east'),  # Hallway east wall
-            tile((535, 645), 140, 10, 'lobby_south'),  # Lobby south wall
-            tile((470, 595), 10, 100, 'lobby_west'),  # Lobby west wall
-            tile((490, 545), 50, 10, 'lobby_north'),   # Lobby north wall
-            tile((510, 470), 10, 160, 'hallway_west_lobbytobedroom'),  # Hallway west wall (lobby -> bedroom)
-            tile((380, 395), 250, 10, 'bedroom_south'),  # Bedroom south wall
-            tile((510, 215), 10, 220, 'hallway_west_bedroomtostudy'),  # Hallway west wall (bedroom -> study)
-            tile((380, 195), 250, 10, 'bedroom_north'),  # Bedroom north wall
-            tile((260, 295), 10, 200, 'bedroom_west'),  # Bedroom west wall
-            tile((480, 110), 50, 10, 'alcove_south'),    # Alcove south wall
-            tile((450, 65), 10, 100, 'alcove_west'),  # Alcove west wall
-            tile((480, 20), 50, 10, 'alcove_north'),    # Alcove north wall
-            tile((510, -100), 10, 250, 'hallway_west_glass'),  # Hallway west wall, looking into courtyard
-            tile((385, -220), 250, 10, 'living_south_glass'),   # Living room south wall, looking into courtyard
-            tile((259, -219), 11, 502, 'courtyard_kitchen_west'),   # Courtyard and kitchen west wall
+            tile((600, 210), 11, 875, 'hallway_east', boundingbox=(-1, 438, 5, 438)),  # Hallway east wall
+            tile((535, 645), 140, 10, 'lobby_south', boundingbox=(70, 1, 70, 1)),  # Lobby south wall
+            tile((470, 595), 10, 100, 'lobby_west', boundingbox=(5, 50, -2, 50)),  # Lobby west wall
+            tile((490, 545), 50, 10, 'lobby_north', boundingbox=(25, 19, 5, -18)),   # Lobby north wall
+            tile((510, 470), 10, 160, 'hallway_west_lobbytobedroom', boundingbox=(5, 79, -2, 59)),  # Hallway west wall (lobby -> bedroom)
+            tile((380, 395), 250, 10, 'bedroom_south', boundingbox=(125, 1, 125, 1)),  # Bedroom south wall
+            tile((510, 215), 10, 220, 'hallway_west_bedroomtostudy', boundingbox=(3, 110, -2, 90)),  # Hallway west wall (bedroom -> study)
+            tile((380, 195), 250, 10, 'bedroom_north', boundingbox=(125, 19, 125, -18)),  # Bedroom north wall
+            tile((260, 295), 10, 200, 'bedroom_west', boundingbox=(5, 100, -2, 100)),  # Bedroom west wall
+            tile((480, 110), 50, 10, 'alcove_south', boundingbox=(25, 1, 25, 1)),    # Alcove south wall
+            tile((450, 65), 10, 100, 'alcove_west', boundingbox=(5, 50, -2, 50)),  # Alcove west wall
+            tile((480, 20), 50, 10, 'alcove_north', boundingbox=(25, 19, 25, -18)),    # Alcove north wall
+            tile((510, -100), 10, 250, 'hallway_west_glass', boundingbox=(5, 125, -2, 100)),  # Hallway west wall, looking into courtyard
+            tile((385, -220), 250, 10, 'living_south_glass', boundingbox=(125, 1, 125, 1)),   # Living room south wall, looking into courtyard
+            tile((259, -219), 11, 502, 'courtyard_kitchen_west', boundingbox=(5, 250, -2, 250)),   # Courtyard and kitchen west wall
             tile((355, 30), 200, 10, 'study_north_glass'),  # Study north wall, looking into courtyard
-            tile((435, -465), 355, 10, 'living_north'),     # Living room/kitchen north wall
-            tile((610, -345), 10, 250, 'living_east')      # Living room east wall
+            tile((435, -465), 355, 10, 'living_north', boundingbox=(178, 19, 178, -18)),     # Living room/kitchen north wall
+            tile((610, -345), 10, 250, 'living_east', boundingbox=(-1, 125, 5, 125))      # Living room east wall
         )
 
         # Doors
@@ -207,19 +207,19 @@ class GameScreen(Screen):
             BaseObject((340, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser1', boundingbox='image'),
             BaseObject((440, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser2', boundingbox='image'),
             BaseObject((585, -385), pygame.image.load(f'{ASSETS}/objects/tv.png'), 'tv', boundingbox=(24, 64)),
-            BaseObject((400, -410), pygame.image.load(f'{ASSETS}/objects/bench1.png'), 'bench1', boundingbox='image'),
-            BaseObject((280, -410), pygame.image.load(f'{ASSETS}/objects/bench2.png'), 'bench2', boundingbox='image'),
+            BaseObject((400, -410), pygame.image.load(f'{ASSETS}/objects/bench1.png'), 'bench1', boundingbox=(7, 56, 5, 35)),
+            BaseObject((280, -410), pygame.image.load(f'{ASSETS}/objects/bench2.png'), 'bench2', boundingbox=(7, 56, 5, 35)),
             BaseObject((345, -390), pygame.image.load(f'{ASSETS}/objects/rug1.png'), 'kitchen_rug'),
             BaseObject((518, -375), pygame.image.load(f'{ASSETS}/objects/rug3.png'), 'living_rug'),
             BaseObject((519, -380), pygame.image.load(f'{ASSETS}/objects/coffee_table.png'), 'coffee_table',  boundingbox=(18, 35)),
             BaseObject((585, -460), pygame.image.load(f'{ASSETS}/objects/lamp.png'), 'lamp', boundingbox='image'),
             BaseObject((585, -320), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(24, 50)),
-            BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(20, 60))
+            BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(7, 40, 10, 20))
         )
 
         # Shift objects for initial positioning
         for object in self.gameobjects.sprites():
-            object.move(-50, 400)
+            object.move(-50, 800)
 
     def _collide(self):
         for object in self.gameobjects.colliders():

@@ -73,8 +73,17 @@ class BaseObject(pygame.sprite.Sprite):
             if boundingbox == 'image':
                 self.boundingbox = self.rect.copy()
             else:
-                self.boundingbox = pygame.Rect((self.rect.left, self.rect.top), boundingbox)
-                self.boundingbox.center = pos
+                if len(boundingbox) > 2:
+                    width = boundingbox[2] + boundingbox[0]
+                    height = boundingbox[1] + boundingbox[3]
+                    self.boundingbox = pygame.Rect(0, 0, width, height)
+                    self.boundingbox.left = pos[0] + boundingbox[0]
+                    self.boundingbox.top = pos[1] + boundingbox[1]
+                    self.boundingbox.right = pos[0] + boundingbox[2]
+                    self.boundingbox.bottom = pos[1] + boundingbox[3]
+                else:
+                    self.boundingbox = pygame.Rect((self.rect.left, self.rect.top), boundingbox)
+                    self.boundingbox.center = pos
         else:
             self.boundingbox = boundingbox
 
@@ -151,7 +160,7 @@ class HideObject(BaseObject):
         pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))
 
 
-def tile(pos, width, height, name, collide=True):
+def tile(pos, width, height, name, boundingbox=None):
     """Creates a tile of a solid colour
 
     This is a simple function that creates a tile of given width and height of a solid colour.
@@ -165,7 +174,6 @@ def tile(pos, width, height, name, collide=True):
     """
     surface = pygame.Surface((width, height))
     surface.fill(GREY)
-    boundingbox = (width, height) if collide else None
     return BaseObject(pos, surface, name, boundingbox=boundingbox)
 
 
