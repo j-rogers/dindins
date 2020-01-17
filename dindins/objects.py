@@ -104,7 +104,7 @@ class DialogueBoxObject(BaseObject):
 
     Doors are interactable objects that present the player with a dialogue box.
     """
-    def __init__(self, pos, image, message, name):
+    def __init__(self, pos, image, message, name, boundingbox=None):
         """Init
 
         Args:
@@ -113,7 +113,7 @@ class DialogueBoxObject(BaseObject):
             height: Height of the door
             message: Message to give to the user when door is used
         """
-        super().__init__(pos, image, name, interactable=True)
+        super().__init__(pos, image, name, interactable=True, boundingbox=boundingbox)
         self.message = message
 
     def interact(self):
