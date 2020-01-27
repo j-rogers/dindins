@@ -178,7 +178,7 @@ class GameScreen(Screen):
             tile((480, 110), 50, 10, 'alcove_south', boundingbox=(25, 1, 25, 1)),    # Alcove south wall
             tile((450, 65), 10, 100, 'alcove_west', boundingbox=(5, 50, -2, 50)),  # Alcove west wall
             tile((480, 20), 50, 10, 'alcove_north', boundingbox=(25, 19, 25, -18)),    # Alcove north wall
-            tile((510, -100), 10, 250, 'hallway_west_glass', boundingbox=(5, 125, -2, 100)),  # Hallway west wall, looking into courtyard
+            tile((510, -100), 10, 250, 'hallway_west_glass', boundingbox=(5, 120, -2, 100)),  # Hallway west wall, looking into courtyard
             tile((385, -220), 250, 10, 'living_south_glass', boundingbox=(125, 1, 125, 1)),   # Living room south wall, looking into courtyard
             tile((259, -219), 11, 502, 'courtyard_kitchen_west', boundingbox=(5, 250, -2, 250)),   # Courtyard and kitchen west wall
             tile((355, 30), 200, 10, 'study_north_glass'),  # Study north wall, looking into courtyard
@@ -196,25 +196,26 @@ class GameScreen(Screen):
             DialogueBoxObject((440, 395), greysurface, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
             DialogueBoxObject((320, 395), greysurface, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
             DialogueBoxObject((510, 150), pygame.transform.rotate(greysurface, 90), 'Study', 'study_door'),          # Study
-            DialogueBoxObject((345, -485), pygame.image.load(f'{ASSETS}/objects/door.png'), 'scary sounds door', 'garage_door')    # Garage
+            DialogueBoxObject((325, -485), pygame.image.load(f'{ASSETS}/objects/door.png'), 'scary sounds door', 'garage_door')    # Garage
         )
 
         # Other objects
         self.gameobjects.add(
-            HideObject((395, 210), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed', boundingbox=(60, 30)),
+            HideObject((395, 210), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed', boundingbox=(30, 38, 18, 15)),
             BaseObject((425, -270), pygame.image.load(f'{ASSETS}/objects/rug2.png'), 'table_rug'),
-            HideObject((425, -285), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(62, 40)),
-            BaseObject((340, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser1', boundingbox='image'),
-            BaseObject((440, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser2', boundingbox='image'),
-            BaseObject((585, -385), pygame.image.load(f'{ASSETS}/objects/tv.png'), 'tv', boundingbox=(24, 64)),
-            BaseObject((400, -410), pygame.image.load(f'{ASSETS}/objects/bench1.png'), 'bench1', boundingbox=(7, 56, 5, 35)),
-            BaseObject((280, -410), pygame.image.load(f'{ASSETS}/objects/bench2.png'), 'bench2', boundingbox=(7, 56, 5, 35)),
-            BaseObject((345, -390), pygame.image.load(f'{ASSETS}/objects/rug1.png'), 'kitchen_rug'),
+            HideObject((425, -285), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(28, 22, 28, 10)),
+            BaseObject((340, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser1', boundingbox=(7, 18, 8, 1)),
+            BaseObject((440, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser2', boundingbox=(6, 18, 7, 1)),
+            BaseObject((585, -385), pygame.image.load(f'{ASSETS}/objects/tv.png'), 'tv', boundingbox=(18, 64)),
+            BaseObject((375, -410), pygame.image.load(f'{ASSETS}/objects/bench1.png'), 'bench1', boundingbox=(7, 56, 5, 35)),
+            BaseObject((278, -410), pygame.image.load(f'{ASSETS}/objects/bench2.png'), 'bench2', boundingbox=(7, 56, 5, 35)),
+            BaseObject((325, -390), pygame.image.load(f'{ASSETS}/objects/rug1.png'), 'kitchen_rug'),
             BaseObject((518, -375), pygame.image.load(f'{ASSETS}/objects/rug3.png'), 'living_rug'),
-            BaseObject((519, -380), pygame.image.load(f'{ASSETS}/objects/coffee_table.png'), 'coffee_table',  boundingbox=(18, 35)),
+            BaseObject((519, -380), pygame.image.load(f'{ASSETS}/objects/coffee_table.png'), 'coffee_table',  boundingbox=(10, 26, 5, 6)),
             BaseObject((585, -460), pygame.image.load(f'{ASSETS}/objects/lamp.png'), 'lamp', boundingbox='image'),
-            BaseObject((585, -320), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(24, 50)),
-            BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(7, 40, 10, 20))
+            BaseObject((585, -315), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(20, 50)),
+            BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(7, 40, 10, 20)),
+
         )
 
         # Shift objects for initial positioning
