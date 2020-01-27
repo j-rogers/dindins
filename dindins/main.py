@@ -215,7 +215,7 @@ class GameScreen(Screen):
             BaseObject((585, -460), pygame.image.load(f'{ASSETS}/objects/lamp.png'), 'lamp', boundingbox='image'),
             BaseObject((585, -315), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(20, 50)),
             BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(7, 40, 10, 20)),
-
+            BaseObject((283, 280), pygame.image.load(f'{ASSETS}/objects/wardrobe.png'), 'wardrobe', boundingbox=(18, 48, 5, 30))
         )
 
         # Shift objects for initial positioning
