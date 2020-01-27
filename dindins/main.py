@@ -283,21 +283,9 @@ class GameScreen(Screen):
                 object = event.object.rect.center
                 pos = self.player.sprite.rect.center
 
-                x = 0
-                y = 0
-
-                # Calculate the offset
-                if object[0] < pos[0]:
-                    x = pos[0] - object[0]
-                else:
-                    x = object[0] - pos[0]
-
-                if object[1] < pos[1]:
-                    y = pos[1] - object[1]
-                else:
-                    y = object[1] - pos[1]
-
-                # Save offset so we can revert when not hiding
+                # Calculate and save offset so we can revert when not hiding
+                x = pos[0] - object[0]
+                y = pos[1] - object[1]
                 self.temp = (x, y)
 
                 # Move objects
