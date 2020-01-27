@@ -6,6 +6,7 @@ Author: Josh Rogers
 """
 
 import pygame
+from math import ceil
 
 from dindins.settings import *
 
@@ -201,3 +202,23 @@ class DialogueBox(pygame.Surface):
             text, rect = Text.render(line, self.fg, (0, 0))
             self.blit(text, (10, y))
             y += 20
+
+
+class StaminaBar(pygame.Surface):
+    def __init__(self, pos, stamina, width=150, height=25):
+        super().__init__((width, height))
+        self.rect = self.get_rect()
+        self.rect.center = pos
+
+        self.width = width
+        self.height = height
+
+        self.stamina = stamina
+        self.blocked = False
+
+    def render(self):
+        self.fill(WHITE)
+        remaining = pygame.Surface((ceil((self.stamina / 100) * self.width), self.height))
+        remaining.fill(RED)
+
+        self.blit(remaining, remaining.get_rect())

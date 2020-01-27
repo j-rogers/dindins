@@ -151,8 +151,11 @@ class GameScreen(Screen):
 
         # State variables
         self.speed = 3
+        self.stamina = StaminaBar((100, 750), 100)
         self.hiding = False
         self.temp = None
+
+        self.buttons.append(self.stamina)
 
         # Floor
         self.gameobjects.add(
@@ -311,6 +314,7 @@ class GameScreen(Screen):
         speed_x = 0
         speed_y = 0
 
+        # Movement
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
             speed_x = self.speed
@@ -320,11 +324,24 @@ class GameScreen(Screen):
             speed_y = self.speed
         if keystate[pygame.K_DOWN]:
             speed_y = self.speed * -1
-        if keystate[pygame.K_LSHIFT]:
+
+        # Sprinting
+        # If Lucy runs out of stamina, she will be blocked until her stamina is full again.
+        if keystate[pygame.K_LSHIFT] and not self.stamina.blocked:
             self.player.sprite.rate = 6
             speed_x *= 2
             speed_y *= 2
+            self.stamina.stamina -= 1
+            # Block sprinting if no stamina remaining
+            if self.stamina.stamina == 0:
+                self.stamina.blocked = True
         else:
+            # Regain stamina when not sprinting
+            if self.stamina.stamina < 100:
+                self.stamina.stamina += 1
+            # Unblock sprinting if full stamina
+            else:
+                self.stamina.blocked = False
             self.player.sprite.rate = 2
 
         # Shift all objects on x axis
