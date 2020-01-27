@@ -127,7 +127,7 @@ class DialogueBox(pygame.Surface):
         typed: List of lines that have been printed to the screen
         finished: Boolean that indicates that the user has pressed space to close the box
     """
-    def __init__(self, text, pos, fg=RED, bg=GREEN, width=500, height=100):
+    def __init__(self, text, pos, fg=BLACK, bg=GREY, width=500, height=100):
         """Creates the dialogue box
 
         Args:
