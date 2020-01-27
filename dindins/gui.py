@@ -181,7 +181,7 @@ class DialogueBox(pygame.Surface):
             w, h = text_surface.get_size()
 
             # Split and create new line if the character goes past box width
-            if w > self.width:
+            if w > self.width - 10:
                 split = self.typed[-1].rsplit(' ', 1)
                 self.typed[-1] = split[-2:][0]
                 self.typed.append(split[-1])
