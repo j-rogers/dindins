@@ -190,13 +190,13 @@ class GameScreen(Screen):
         greysurface = pygame.Surface((50, 20))
         greysurface.fill(GREY)
         self.gameobjects.add(
-            DialogueBoxObject((560, 645), greysurface, 'Scary door', 'front_door'),     # Front door
-            DialogueBoxObject((510, 450), pygame.transform.rotate(greysurface, 90), 'Stinky door', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
-            DialogueBoxObject((470, 595), pygame.transform.rotate(greysurface, 90), 'storage door', 'storage_door'),   # Room 1
-            DialogueBoxObject((440, 395), greysurface, 'stinky door 2', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
-            DialogueBoxObject((320, 395), greysurface, 'outside door', 'courtyard_door_bedroom'),   # Bedroom courtyard
-            DialogueBoxObject((510, 150), pygame.transform.rotate(greysurface, 90), 'Study', 'study_door'),          # Study
-            DialogueBoxObject((325, -485), pygame.image.load(f'{ASSETS}/objects/door.png'), 'scary sounds door', 'garage_door')    # Garage
+            DialogueBoxObject((560, 645), greysurface, 'Scary people come through this door. I would never dare go out there.', 'front_door'),     # Front door
+            DialogueBoxObject((510, 450), pygame.transform.rotate(greysurface, 90), 'My humans litterbox is in there.', 'bathroom_door_hallway'),    # Bathroom door (from hallway)
+            DialogueBoxObject((470, 595), pygame.transform.rotate(greysurface, 90), 'I used to sleep in this room, but now it\'s never open.', 'storage_door'),   # Room 1
+            DialogueBoxObject((440, 395), greysurface, 'My humans litterbox is in there.', 'bathroom_door_bedroom'),  # Bathroom door (from bedroom)
+            DialogueBoxObject((320, 395), greysurface, 'This goes to a courtyard. There was once a trapped bird in there.', 'courtyard_door_bedroom'),   # Bedroom courtyard
+            DialogueBoxObject((510, 150), pygame.transform.rotate(greysurface, 90), 'This is where my humans spend most of their time. It\'s only open when they\'re home.', 'study_door'),          # Study
+            DialogueBoxObject((325, -485), pygame.image.load(f'{ASSETS}/objects/door.png'), 'Scary sounds come from this door. But my humans also come through here.', 'garage_door')    # Garage
         )
 
         # Other objects
