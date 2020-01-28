@@ -216,9 +216,10 @@ class GameScreen(Screen):
             BaseObject((518, -375), pygame.image.load(f'{ASSETS}/objects/rug3.png'), 'living_rug'),
             BaseObject((519, -380), pygame.image.load(f'{ASSETS}/objects/coffee_table.png'), 'coffee_table',  boundingbox=(10, 26, 5, 6)),
             BaseObject((585, -460), pygame.image.load(f'{ASSETS}/objects/lamp.png'), 'lamp', boundingbox='image'),
-            BaseObject((585, -315), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(20, 50)),
+            BaseObject((585, -315), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(20, 10)),
             BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(7, 40, 10, 20)),
-            BaseObject((283, 280), pygame.image.load(f'{ASSETS}/objects/wardrobe.png'), 'wardrobe', boundingbox=(18, 48, 5, 30))
+            BaseObject((283, 280), pygame.image.load(f'{ASSETS}/objects/wardrobe.png'), 'wardrobe', boundingbox=(18, 48, 5, 30)),
+            DialogueBoxObject((595, -260), pygame.image.load(f'{ASSETS}/objects/bowls.png'), 'Yummy food!', 'bowls', boundingbox=(1, 24, 8, 24))
         )
 
         # Shift objects for initial positioning
