@@ -153,9 +153,16 @@ class GameScreen(Screen):
         self.speed = 3
         self.stamina = StaminaBar((100, 750), 100)
         self.hiding = False
+        self.paused = False
         self.temp = None
 
         self.buttons.append(self.stamina)
+
+        self.objectives = [
+            'eat_food',
+            'hide_under_bed',
+            'nothing'
+        ]
 
         # Floor
         self.gameobjects.add(
@@ -204,7 +211,6 @@ class GameScreen(Screen):
 
         # Other objects
         self.gameobjects.add(
-            HideObject((395, 210), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed', boundingbox=(30, 38, 18, 15)),
             BaseObject((425, -270), pygame.image.load(f'{ASSETS}/objects/rug2.png'), 'table_rug'),
             HideObject((425, -285), pygame.image.load(f'{ASSETS}/objects/table.png'), 'table', boundingbox=(28, 22, 28, 10)),
             BaseObject((340, 200), pygame.image.load(f'{ASSETS}/objects/dresser.png'), 'dresser1', boundingbox=(7, 18, 8, 1)),
@@ -219,7 +225,12 @@ class GameScreen(Screen):
             BaseObject((585, -315), pygame.image.load(f'{ASSETS}/objects/plant.png'), 'plant', boundingbox=(20, 10)),
             BaseObject((455, -385), pygame.image.load(f'{ASSETS}/objects/couch.png'), 'couch', boundingbox=(7, 40, 10, 20)),
             BaseObject((283, 280), pygame.image.load(f'{ASSETS}/objects/wardrobe.png'), 'wardrobe', boundingbox=(18, 48, 5, 30)),
-            DialogueBoxObject((595, -260), pygame.image.load(f'{ASSETS}/objects/bowls.png'), 'Yummy food!', 'bowls', boundingbox=(1, 24, 8, 24))
+        )
+
+        # Objective objects
+        self.gameobjects.add(
+            Bowls(self.objectives),
+            Bed(self.objectives)
         )
 
         # Shift objects for initial positioning
@@ -244,14 +255,14 @@ class GameScreen(Screen):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 # Regular interaction
-                if self.speed:
+                if not self.paused and not self.hiding:
                     for object in self.gameobjects.interactables():
                         # Allows for interaction with collidable objects
                         if pygame.sprite.collide_rect_ratio(1.25)(self.player.sprite, object):
                             object.interact()
 
                 # Stop hiding
-                elif self.hiding:
+                elif self.hiding and not self.paused:
                     # Resume player
                     self.player.sprite.pause = False
                     self.hiding = False
@@ -263,11 +274,13 @@ class GameScreen(Screen):
 
         # Pause the game
         elif event.type == PAUSE:
+            self.paused = True
             self.speed = 0
             self.player.sprite.pause = True
 
         # Resume the game
         elif event.type == RESUME:
+            self.paused = False
             self.speed = 3
             self.player.sprite.pause = False
 
@@ -302,6 +315,10 @@ class GameScreen(Screen):
             for object in event.objects:
                 if type(object) == DialogueBox:
                     self.dialogue.append(object)
+
+        # Objective completed
+        elif event.type == OBJECTIVE:
+            self.objectives.remove(event.objective)
 
     def update(self):
         """Updates the screen

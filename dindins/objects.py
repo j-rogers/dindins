@@ -160,6 +160,38 @@ class HideObject(BaseObject):
         pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))
 
 
+class Bowls(DialogueBoxObject):
+    def __init__(self, objectives):
+        super().__init__((595, -260), pygame.image.load(f'{ASSETS}/objects/bowls.png'), 'Yummy food!', 'bowls', boundingbox=(1, 24, 8, 24))
+        self.objectives = objectives
+
+    def interact(self):
+        if self.objectives[0] == 'eat_food':
+            self.message = 'What was that?                       ...                  I should go hide under the bed!'
+            super().interact()
+            pygame.event.post(pygame.event.Event(OBJECTIVE, {'objective': self.objectives[0]}))
+        elif self.objectives[0] == 'hide_under_bed':
+            # PLAY BANG SOUND
+            self.message = 'I need to hide under the bed!'
+            super().interact()
+        else:
+            self.message = 'Yummy food, but no time for that now!'
+            super().interact()
+
+
+class Bed(HideObject):
+    def __init__(self, objectives):
+        super().__init__((395, 210), pygame.image.load(f'{ASSETS}/objects/bed.png'), 'bed', boundingbox=(30, 38, 18, 15))
+        self.objectives = objectives
+
+    def interact(self):
+        super().interact()
+        if self.objectives[0] == 'hide_under_bed':
+            box = DialogueBox('I think the coast is clear...', (WIDTH / 2, HEIGHT * .8))
+            pygame.event.post(pygame.event.Event(RENDER, {'objects': [box]}))
+            pygame.event.post(pygame.event.Event(OBJECTIVE, {'objective': self.objectives[0]}))
+
+
 def tile(pos, width, height, name, boundingbox=None):
     """Creates a tile of a solid colour
 
