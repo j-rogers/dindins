@@ -1,9 +1,10 @@
 import pygame
 
 from dindins.settings import *
+from . import Character
 
 
-class Lucy(pygame.sprite.Sprite):
+class Lucy(Character):
     def __init__(self):
         """Initialises Lucy"""
         # Init sprite, set direction and location
@@ -11,13 +12,6 @@ class Lucy(pygame.sprite.Sprite):
         self.image = pygame.image.load(f'{ASSETS}/lucy/idle/lucy_idle_down.png')
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
-
-        # Animation stuff
-        self.direction = 'down'
-        self.index = 0
-        self.ticker = 0
-        self.rate = 2
-        self.pause = False
 
         # Idle
         self.idle = {
@@ -42,27 +36,6 @@ class Lucy(pygame.sprite.Sprite):
                 pygame.image.load(f'{ASSETS}/lucy/walk/right/lucy_walk_right_1.png'),
                 pygame.image.load(f'{ASSETS}/lucy/walk/right/lucy_walk_right_2.png')]
         }
-
-    def _playanimation(self, animation):
-        """Plays the specified animation
-
-        The ticker increments with every frame, so we perform a modulus using the FPS and rate to calculate when a new
-        animation image should be displayed.
-
-        Args:
-            animation: List of images that create the animation
-            rate: Rate that frames should be shown per second
-        """
-        if self.ticker % (FPS / self.rate) == 0:
-            # Reset the index if reached the end of the animation
-            self.index = 0 if self.index == len(animation) else self.index
-
-            self.image = animation[self.index]
-
-            # Increase index
-            self.index += 1
-
-        self.ticker += 1
 
     def update(self):
         """Update sprite

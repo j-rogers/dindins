@@ -1,8 +1,4 @@
-import pygame
-
-from dindins.lucy import Lucy
-from dindins.settings import *
-from dindins.gui import *
+from dindins.characters.lucy import Lucy
 from dindins.objects import *
 
 
