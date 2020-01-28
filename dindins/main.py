@@ -282,7 +282,9 @@ class GameScreen(Screen):
         elif event.type == RESUME:
             self.paused = False
             self.speed = 3
-            self.player.sprite.pause = False
+            # Only show the player if they are not hiding
+            if not self.hiding:
+                self.player.sprite.pause = False
 
         # Hide
         # Hiding pauses only the player (not NPCs), and makes the player sprite transparent.
