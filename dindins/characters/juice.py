@@ -10,6 +10,7 @@ class Juice(Character):
         self.image = pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_down.png')
         self.rect = self.image.get_rect()
         self.rect.center = pos
+        self.boundingbox = self.rect.copy()
 
         self.idle = {
             'up': pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_up.png'),
@@ -36,6 +37,17 @@ class Juice(Character):
                 pygame.image.load(f'{ASSETS}/juice/walk/right/juice_walk_right_2.png')
             ]
         }
+
+    def move(self, x, y):
+        """Shifts the object by x and y
+
+        Args:
+            x: Pixel value to move the object horizontally
+            y: Pixel value to move the object vertically
+        """
+        self.rect.move_ip(x, y)
+        if self.boundingbox:
+            self.boundingbox.move_ip(x, y)
 
     def update(self):
         pass

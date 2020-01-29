@@ -1,4 +1,5 @@
 from dindins.characters.lucy import Lucy
+from dindins.characters.juice import Juice
 from dindins.objects import *
 
 
@@ -157,6 +158,7 @@ class GameScreen(Screen):
         self.objectives = [
             'eat_food',
             'hide_under_bed',
+            'go_to_kitchen',
             'nothing'
         ]
 
@@ -226,7 +228,7 @@ class GameScreen(Screen):
         # Objective objects
         self.gameobjects.add(
             Bowls(self.objectives),
-            Bed(self.objectives)
+            Bed(self.objectives),
         )
 
         # Shift objects for initial positioning
@@ -317,6 +319,9 @@ class GameScreen(Screen):
         # Objective completed
         elif event.type == OBJECTIVE:
             self.objectives.remove(event.objective)
+
+            if self.objectives[0] == 'go_to_kitchen':
+                self.gameobjects.add(Juice((555, -220)))
 
     def update(self):
         """Updates the screen
