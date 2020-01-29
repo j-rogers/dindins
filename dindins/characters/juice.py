@@ -11,6 +11,10 @@ class Juice(Character):
         self.rect = self.image.get_rect()
         self.rect.center = pos
         self.boundingbox = self.rect.copy()
+        self.interactable = False
+
+        self.distance = 0
+        self.flip = False
 
         self.idle = {
             'up': pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_up.png'),
@@ -50,4 +54,13 @@ class Juice(Character):
             self.boundingbox.move_ip(x, y)
 
     def update(self):
-        pass
+        if not self.flip:
+            self.move(0, 1)
+            self._playanimation(self.walk['down'])
+            self.distance += 1
+            self.flip = True if self.distance == 800 else False
+        elif self.flip:
+            self.move(0, -1)
+            self._playanimation(self.walk['up'])
+            self.distance -= 1
+            self.flip = False if self.distance == 0 else True

@@ -321,7 +321,7 @@ class GameScreen(Screen):
             self.objectives.remove(event.objective)
 
             if self.objectives[0] == 'go_to_kitchen':
-                self.gameobjects.add(Juice((555, -220)))
+                self.gameobjects.add(Juice((660, -20)))
 
     def update(self):
         """Updates the screen
