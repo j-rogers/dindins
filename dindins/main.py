@@ -158,7 +158,7 @@ class GameScreen(Screen):
         self.objectives = [
             'eat_food',
             'hide_under_bed',
-            'go_to_kitchen',
+            'go_to_food',
             'nothing'
         ]
 
@@ -240,6 +240,11 @@ class GameScreen(Screen):
             if self.player.sprite.rect.colliderect(object.boundingbox):
                 return True
 
+    def _trigger(self):
+        for object in self.gameobjects.triggerables():
+            if self.player.sprite.rect.colliderect(object.rect):
+                object.trigger()
+
     def handle(self, event):
         """Handles in game events
 
@@ -320,8 +325,13 @@ class GameScreen(Screen):
         elif event.type == OBJECTIVE:
             self.objectives.remove(event.objective)
 
-            if self.objectives[0] == 'go_to_kitchen':
-                self.gameobjects.add(Juice((660, -20)))
+            if self.objectives[0] == 'go_to_food':
+                self.gameobjects.add(SpawnTrigger(
+                    (660, 500),
+                    pygame.image.load(f'{ASSETS}/terrain/transparent.png'),
+                    'juice_trigger',
+                    Juice((660, -20))
+                ))
 
     def update(self):
         """Updates the screen
@@ -382,6 +392,9 @@ class GameScreen(Screen):
         if self._collide():
             for object in self.gameobjects.sprites():
                 object.move(0, -1 * speed_y)
+
+        # Check triggers
+        self._trigger()
 
         return self
 

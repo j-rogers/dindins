@@ -37,6 +37,14 @@ class ObjectsGroup(pygame.sprite.Group):
 
         return pygame.sprite.Group(interactables)
 
+    def triggerables(self):
+        triggerables = []
+        for object in self.sprites():
+            if object.triggerable:
+                triggerables.append(object)
+
+        return pygame.sprite.Group(triggerables)
+
     def get(self, objectname):
         for object in self.sprites():
             if object.name == objectname:
@@ -49,8 +57,16 @@ class BaseObject(pygame.sprite.Sprite):
     """Base object
 
     This class provides a base for in game objects, and is treated as a pygame.sprite.Sprite. As they are sprites, each
-    object requires an image property. Each object has the option to be a collider or interactable, through the collide
-    and interactable properties, respectively. If interactable is set, then the interact method MUST be implemented.
+    object requires an image property. Each object can set a specific property to enable certain functionality. If a
+    set property has a corresponding method, then that method MUST be implemented.
+
+    Available Properties:
+        interactable: An interactable object is an object that performs the interact() method when the player presses
+            space bar near it. MUST IMPLEMENT interact() METHOD.
+        boundingbox: If set, collision will be detected on the object. The player will not be able to move through the
+            object.
+        triggerable: A trigger object is an object that performs the trigger() method when the player walks into it (as
+            opposed to pressing the space bar as with the interactable property). MUST IMPLEMENT trigger() METHOD.
 
     Attributes:
         image: Image surface of the sprite
@@ -59,7 +75,7 @@ class BaseObject(pygame.sprite.Sprite):
         interactable: Bool indicating if this object can be interacted with (defaults to False)
         boundingbox: pygame.Rect used to detect collision
     """
-    def __init__(self, pos, image, name, interactable=False, boundingbox=None):
+    def __init__(self, pos, image, name, interactable=False, boundingbox=None, triggerable=False):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
@@ -68,6 +84,7 @@ class BaseObject(pygame.sprite.Sprite):
         self.name = name
 
         self.interactable = interactable
+        self.triggerable = triggerable
 
         if boundingbox:
             if boundingbox == 'image':
@@ -92,6 +109,9 @@ class BaseObject(pygame.sprite.Sprite):
 
         To be implemented in objects that have the interactable property set.
         """
+        raise NotImplementedError
+
+    def trigger(self):
         raise NotImplementedError
 
     def move(self, x, y):
@@ -160,6 +180,15 @@ class HideObject(BaseObject):
         pygame.event.post(pygame.event.Event(HIDE, {'object': self, 'move': False}))
 
 
+class SpawnTrigger(BaseObject):
+    def __init__(self, pos, image, name, spawn, boundingbox=None):
+        super().__init__(pos, image, name, boundingbox=boundingbox, triggerable=True)
+        self.spawn = spawn
+
+    def trigger(self):
+        pygame.event.post(pygame.event.Event(RENDER, {'objects': self.spawn}))
+
+
 class Bowls(DialogueBoxObject):
     def __init__(self, objectives):
         super().__init__((595, -260), pygame.image.load(f'{ASSETS}/objects/bowls.png'), 'Yummy food!', 'bowls', boundingbox=(1, 24, 8, 24))
@@ -187,7 +216,7 @@ class Bed(HideObject):
     def interact(self):
         super().interact()
         if self.objectives[0] == 'hide_under_bed':
-            box = DialogueBox('I think the coast is clear...', (WIDTH / 2, HEIGHT * .8))
+            box = DialogueBox('I think the coast is clear... I can go back to eating my breakfast.', (WIDTH / 2, HEIGHT * .8))
             pygame.event.post(pygame.event.Event(RENDER, {'objects': [box]}))
             pygame.event.post(pygame.event.Event(OBJECTIVE, {'objective': self.objectives[0]}))
 
