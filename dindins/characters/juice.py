@@ -16,6 +16,8 @@ class Juice(Character):
 
         self.distance = 0
         self.flip = False
+        self.pause = False
+        self.name = 'juice'
 
         self.idle = {
             'up': pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_up.png'),

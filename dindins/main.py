@@ -159,6 +159,7 @@ class GameScreen(Screen):
             'eat_food',
             'hide_under_bed',
             'go_to_food',
+            'avoid_juice',
             'nothing'
         ]
 
@@ -281,6 +282,11 @@ class GameScreen(Screen):
             self.speed = 0
             self.player.sprite.pause = True
 
+            # Pause Juice if she is in game
+            juice = self.gameobjects.get('juice')
+            if juice:
+                juice.pause = True
+
         # Resume the game
         elif event.type == RESUME:
             self.paused = False
@@ -288,6 +294,11 @@ class GameScreen(Screen):
             # Only show the player if they are not hiding
             if not self.hiding:
                 self.player.sprite.pause = False
+
+            # Resume Juice if she is in game
+            juice = self.gameobjects.get('juice')
+            if juice:
+                juice.pause = False
 
         # Hide
         # Hiding pauses only the player (not NPCs), and makes the player sprite transparent.
@@ -320,6 +331,9 @@ class GameScreen(Screen):
             for object in event.objects:
                 if type(object) == DialogueBox:
                     self.dialogue.append(object)
+                    pygame.event.post(pygame.event.Event(PAUSE, {}))
+                else:
+                    self.gameobjects.add(object)
 
         # Objective completed
         elif event.type == OBJECTIVE:
@@ -330,7 +344,8 @@ class GameScreen(Screen):
                     (660, 500),
                     pygame.image.load(f'{ASSETS}/terrain/transparent.png'),
                     'juice_trigger',
-                    Juice((660, -20))
+                    Juice((460, 200)),
+                    DialogueBox('Oh no, it\'s Juice! She always bullies me when the humans leave. I better avoid her.', (WIDTH / 2, HEIGHT * .8))
                 ))
 
     def update(self):

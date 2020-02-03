@@ -181,12 +181,13 @@ class HideObject(BaseObject):
 
 
 class SpawnTrigger(BaseObject):
-    def __init__(self, pos, image, name, spawn, boundingbox=None):
+    def __init__(self, pos, image, name, *spawn, boundingbox=None):
         super().__init__(pos, image, name, boundingbox=boundingbox, triggerable=True)
         self.spawn = spawn
 
     def trigger(self):
-        pygame.event.post(pygame.event.Event(RENDER, {'objects': self.spawn}))
+        self.remove(self.groups())
+        pygame.event.post(pygame.event.Event(RENDER, {'objects': [object for object in self.spawn]}))
 
 
 class Bowls(DialogueBoxObject):
