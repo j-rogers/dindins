@@ -1,23 +1,16 @@
 import pygame
 
 from dindins.settings import *
-from . import Character
+from dindins.objects import Animated
 
 
-class Juice(Character):
+class Juice(Animated):
     def __init__(self, pos):
-        super().__init__()
-        self.image = pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_down.png')
-        self.rect = self.image.get_rect()
-        self.rect.center = pos
+        super().__init__(pos, pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_down.png'), 'juice', triggerable=True)
         self.boundingbox = self.rect.copy()
-        self.interactable = False
-        self.triggerable = True
 
         self.distance = 0
         self.flip = False
-        self.pause = False
-        self.name = 'juice'
 
         self.idle = {
             'up': pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_up.png'),

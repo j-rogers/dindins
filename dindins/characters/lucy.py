@@ -1,17 +1,14 @@
 import pygame
 
 from dindins.settings import *
-from . import Character
+from dindins.objects import Animated
 
 
-class Lucy(Character):
+class Lucy(Animated):
     def __init__(self):
         """Initialises Lucy"""
         # Init sprite, set direction and location
-        super().__init__()
-        self.image = pygame.image.load(f'{ASSETS}/lucy/idle/lucy_idle_down.png')
-        self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+        super().__init__((WIDTH / 2, HEIGHT / 2), pygame.image.load(f'{ASSETS}/lucy/idle/lucy_idle_down.png'), 'lucy', boundingbox='image')
 
         # Idle
         self.idle = {
