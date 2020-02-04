@@ -112,6 +112,10 @@ class BaseObject(pygame.sprite.Sprite):
         raise NotImplementedError
 
     def trigger(self):
+        """Triggered when player collides with the object
+
+        To be implemented in objects that have the triggerable property set.
+        """
         raise NotImplementedError
 
     def move(self, x, y):
@@ -129,8 +133,21 @@ class BaseObject(pygame.sprite.Sprite):
 
 
 class Animated(BaseObject):
+    """Animated object
+
+    This class represents an animated object. A number of animation state variables are used to keep track of current
+    animation, frame, direction, etc. The update() method must be implemented to update the current animation frame.
+    This class also includes the _playanimation() method which plays the given animation.
+
+    Attributes:
+        direction -> String: Direction the object is currently facing
+        index -> Int: Index of the animation list specifying which frame should be displayed
+        ticker -> Int: Ticks every frame, used to only update animation frame every x frames, where x is the rate
+        rate -> Int: Number of frames before a new animation frame should be used
+        pause -> Boolean: Indicates if the animation should be paused
+    """
     def __init__(self, pos, image, name, interactable=False, boundingbox=None, triggerable=False):
-        """Initialises the character"""
+        """Initialises the animated object"""
         super().__init__(pos, image, name, interactable=interactable, boundingbox=boundingbox, triggerable=triggerable)
 
         # Animation variables
@@ -152,7 +169,6 @@ class Animated(BaseObject):
 
         Args:
             animation: List of images that create the animation
-            rate: Rate that frames should be shown per second
         """
         if self.ticker % (FPS / self.rate) == 0:
             # Reset the index if reached the end of the animation
@@ -227,11 +243,27 @@ class HideObject(BaseObject):
 
 
 class SpawnTrigger(BaseObject):
+    """Triggerable object that spawns other objects
+
+    This object spawns objects (given by the attribute spawn) when the player collides with it.
+
+    Attributes:
+        spawn -> List[BaseObject]: Objects to be spawned/rendered when triggered
+    """
     def __init__(self, pos, image, name, *spawn, boundingbox=None):
+        """Init
+
+        Args:
+            pos -> Tuple[Int]: Coordinates of the object
+            image -> pygame.image.Image: Image of the object
+            name -> String: Name of the object
+            boundingbox -> Tuple[Int]: Bounding box for collision detection (defaults to None)
+        """
         super().__init__(pos, image, name, boundingbox=boundingbox, triggerable=True)
         self.spawn = spawn
 
     def trigger(self):
+        """Trigger object spawns via RENDER event"""
         self.remove(self.groups())
         pygame.event.post(pygame.event.Event(RENDER, {'objects': [object for object in self.spawn]}))
 
