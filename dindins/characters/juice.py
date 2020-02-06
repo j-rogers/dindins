@@ -8,6 +8,8 @@ class Juice(Animated):
     def __init__(self, pos):
         super().__init__(pos, pygame.image.load(f'{ASSETS}/juice/idle/juice_idle_down.png'), 'juice', triggerable=True)
         self.boundingbox = self.rect.copy()
+        self.rect.height = 50
+        self.rect.width = 32
 
         self.distance = 0
         self.flip = False
@@ -39,7 +41,8 @@ class Juice(Animated):
         }
 
     def trigger(self):
-        pass
+        #pygame.event.post(pygame.event.Event(GAME_OVER, {}))
+        print('ded')
 
     def move(self, x, y):
         """Shifts the object by x and y
@@ -58,9 +61,11 @@ class Juice(Animated):
                 self.move(0, 1)
                 self._playanimation(self.walk['down'])
                 self.distance += 1
-                self.flip = True if self.distance == 800 else False
+                if self.distance == 800:
+                    self.flip = True
             elif self.flip:
                 self.move(0, -1)
                 self._playanimation(self.walk['up'])
                 self.distance -= 1
-                self.flip = False if self.distance == 0 else True
+                if self.distance == 0:
+                    self.flip = False

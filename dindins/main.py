@@ -152,6 +152,7 @@ class GameScreen(Screen):
         self.hiding = False
         self.paused = False
         self.temp = None
+        self.gameover = False
 
         self.buttons.append(self.stamina)
 
@@ -344,9 +345,12 @@ class GameScreen(Screen):
                     (660, 500),
                     pygame.image.load(f'{ASSETS}/terrain/transparent.png'),
                     'juice_trigger',
-                    Juice((460, 200)),
+                    Juice((510, -200)),
                     DialogueBox('Oh no, it\'s Juice! She always bullies me when the humans leave. I better avoid her.', (WIDTH / 2, HEIGHT * .8))
                 ))
+
+        elif event.type == GAME_OVER:
+            self.gameover = True
 
     def update(self):
         """Updates the screen
@@ -411,7 +415,7 @@ class GameScreen(Screen):
         # Check triggers
         self._trigger()
 
-        return self
+        return self if not self.gameover else OptionsMenu()
 
 
 class OptionsMenu(Screen):
